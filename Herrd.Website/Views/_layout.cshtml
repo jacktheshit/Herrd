@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<!--[if IE 7 ]><html lang="en class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="en class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>Herrd BETA</title>
+	<meta name="viewport" content="width=582">
+	<link href="/css/screen.css" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+	<script type="text/javascript">(function (H) { H.className = H.className.replace(/\bno-js\b/, 'js') })(document.documentElement)</script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="header">
+			<div class="inner">
+				<p class="h2 reverse float_left">
+					<a href="index.php">
+						<img src="images/logo.png" alt="Herd BETA logo" />
+					</a>
+				</p>
+				<div class="profile float_right">
+					<a href="#" class="avatar block">
+						<img src="images/avatar.jpg" width="30" height="30" />
+					</a>
+					<div class="account">
+						<span class="arrow">
+							<!--arrow-->
+						</span>
+						<ul class="nav_account">
+							<li>
+								<a href="#">Edit profile</a>
+							</li>
+							<li>
+								<a href="login.php">Log out</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<ul class="nav float_right">
+					<li>
+						<a href="index.php" class="current">Playlist</a>
+					</li>
+					<li>
+						<a href="archive.php">Archive</a>
+					</li>
+					<li>
+						<a href="#">Feed</a>
+					</li>
+				</ul>
+				<div class="search_field float_right">
+					<a href="#" class="search_link float_right">Search</a>
+					<input type="text" value="" placeholder="Search" id="search_filter" class="search_input input_title" autocomplete="off" />
+				</div>
+			</div>
+		</div>
+		<div id="playlist" class="site_container">
+			<div class="form_container">
+				<form id="form_add" action="includes/functions/add.php" method="post">
+					<label name="term" for="term">Link</label>
+					<textarea name="term" placeholder="Add..."></textarea>
+					<label name="title" for="title">Title</label>
+					<div class="title">
+						<input class="input_title" type="text" name="title" placeholder="Title (optional)" />
+						<a href="#" class="reset">Clear field</a>
+					</div>
+					<input id="submit_add" type="submit" value="Save" />
+				</form>
+			</div>
+			<div class="item_container">
+				@RenderBody()
+			</div>
+		</div>
+		<div class="push">
+			<!--push-->
+		</div>
+	</div>
+	<div class="footer">
+		<div class="inner">
+			<ul class="nav_footer float_right">
+				<li>
+					<a href="about.php">About</a>
+				</li>
+				<li class="no_margin_right">
+					<a href="mailto:hello@herd.coasdjkew">Contact</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript" src="/scripts/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="/scripts/common.js"></script>
+</body>
+</html>

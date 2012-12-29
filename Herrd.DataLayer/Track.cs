@@ -21,7 +21,7 @@ namespace Herrd.DataLayer
         public string term { get; set; }
         public bool archive { get; set; }
         public string type { get; set; }
-        public string playlist { get; set; }
+        public Nullable<bool> playlist { get; set; }
         public string embed_url { get; set; }
         public string artwork { get; set; }
     

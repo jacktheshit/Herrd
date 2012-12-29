@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -104,6 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -113,7 +118,22 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\screen.css" />
     <Content Include="Global.asax" />
+    <Content Include="images\artwork-link.png" />
+    <Content Include="images\artwork-memo.png" />
+    <Content Include="images\avatar.jpg" />
+    <Content Include="images\icon-clear.gif" />
+    <Content Include="images\icon-list.gif" />
+    <Content Include="images\icon-loader.gif" />
+    <Content Include="images\icon-search.png" />
+    <Content Include="images\logo-soundcloud.gif" />
+    <Content Include="images\logo-spotify.gif" />
+    <Content Include="images\logo-vimeo.gif" />
+    <Content Include="images\logo-youtube.gif" />
+    <Content Include="images\logo.png" />
+    <Content Include="scripts\common.js" />
+    <Content Include="scripts\jquery-1.7.2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -125,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +159,12 @@
       <Project>{047f8e16-594b-44fb-8515-3a78a7c0a6d5}</Project>
       <Name>Herrd.Extensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
