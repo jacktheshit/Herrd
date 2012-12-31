@@ -46,6 +46,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -108,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ArchiveController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -166,6 +169,21 @@
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\RazorLayouts.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\TrackList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\FormAddTrack.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Archive\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\TrackItemNormal.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -182,7 +200,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>24640</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:1371/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

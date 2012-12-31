@@ -42,10 +42,10 @@
 				</div>
 				<ul class="nav float_right">
 					<li>
-						<a href="index.php" class="current">Playlist</a>
+						<a href="/" class="current">Playlist</a>
 					</li>
 					<li>
-						<a href="archive.php">Archive</a>
+						@Html.ActionLink("Archive", "Index", "Archive")
 					</li>
 					<li>
 						<a href="#">Feed</a>
@@ -57,23 +57,9 @@
 				</div>
 			</div>
 		</div>
-		<div id="playlist" class="site_container">
-			<div class="form_container">
-				<form id="form_add" action="includes/functions/add.php" method="post">
-					<label name="term" for="term">Link</label>
-					<textarea name="term" placeholder="Add..."></textarea>
-					<label name="title" for="title">Title</label>
-					<div class="title">
-						<input class="input_title" type="text" name="title" placeholder="Title (optional)" />
-						<a href="#" class="reset">Clear field</a>
-					</div>
-					<input id="submit_add" type="submit" value="Save" />
-				</form>
-			</div>
-			<div class="item_container">
-				@RenderBody()
-			</div>
-		</div>
+
+		@RenderBody()
+
 		<div class="push">
 			<!--push-->
 		</div>

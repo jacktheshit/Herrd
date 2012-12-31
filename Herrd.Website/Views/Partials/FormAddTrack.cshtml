@@ -1,0 +1,18 @@
+﻿@using Herrd.DataLayer
+@model Herrd.DataLayer.Track
+
+<div class="form_container">
+	@using (Html.BeginForm("AddTrack", "Home", FormMethod.Post, new { @id = "form_add"})){
+	
+		@Html.LabelFor(t => t.term)
+		@Html.TextAreaFor(t => t.term, new { @placeholder = "Add..."})
+
+		@Html.LabelFor(x => x.title, "Title")
+		<div class="title">
+			@Html.TextBoxFor(x => x.title, new { @class = "input_title", @placeholder = "Title (optional)" })
+			<a href="#" class="reset">Clear field</a>
+		</div>
+	 
+		<input id="submit_add" type="submit" value="Save" />
+	}
+</div>

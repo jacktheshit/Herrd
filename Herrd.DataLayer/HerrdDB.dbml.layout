@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="HerrdDB">
+  <DataContextMoniker Name="/HerrdDBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="bbe72718-5075-4b6a-87e6-b3276c7a813c" absoluteBounds="1.75, 1.625, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/HerrdDBDataContext/User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dd10535b-fe77-422b-987a-84f23428a225" absoluteBounds="1.7650000000000001, 2.085, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ab4e57e9-ab65-40b3-95b1-74c8258c3c3c" absoluteBounds="4.625, 1.625, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/HerrdDBDataContext/Track" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7ac9258d-3dd1-4e95-b92c-7b403b81f768" absoluteBounds="4.64, 2.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.75 : 2.41429768880208); (4.625 : 2.41429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/HerrdDBDataContext/User/User_Track" />
+      <nodes>
+        <classShapeMoniker Id="bbe72718-5075-4b6a-87e6-b3276c7a813c" />
+        <classShapeMoniker Id="ab4e57e9-ab65-40b3-95b1-74c8258c3c3c" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

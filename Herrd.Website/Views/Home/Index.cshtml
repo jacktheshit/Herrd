@@ -1,51 +1,22 @@
-﻿@model List<Herrd.DataLayer.Track>
+﻿@using Herrd.DataLayer
+@model List<Herrd.DataLayer.Track>
 
 @{
 	ViewBag.Title = "Index";
 	Layout = "~/Views/_layout.cshtml";
 }
 
-<h2>Index</h2>
+<div id="playlist" class="site_container">
 
-@foreach (var track in Model.Where(x => x.archive))
-{
-	<div id="item-@track.id" class="item match spotify">
-		<div class="media">
-			<div class="med_l artwork">
-				<img src="@track.artwork" alt="@track.title">
-			</div>
-			<div class="bd">
-				<h2>@track.title</h2>
-				<p class="date no_margin_bottom">@track.timestamp</p>
-			</div>
-		</div>
-		<div class="expand loader" data-src="https://embed.spotify.com/?uri=spotify:album:2q9nOf3w1Ho5k9BGawOHnn">
-			<div class="inner">
-				<iframe width="512" height="592" frameborder="0" allowtransparency="true"></iframe>
-			</div>
-		</div>
-		<div class="controls_container" style="opacity: 1; visibility: visible;">
-			<ul class="controls">
-				<li><a class="btn_archive" href="#">Archive</a></li>
-				<li><a class="btn_edit" href="#">Edit<span><!--arrow--></span></a></li>
-				<li><a class="btn_delete" href="#">Delete</a></li>
-			</ul>
-		</div>
-		<div class="form_container">
-			<form id="form_edit_236" action="includes/functions/edit.php" method="post">
-				<label name="term" for="term">Link</label>
-				<textarea name="term" placeholder="Add...">spotify:album:2q9nOf3w1Ho5k9BGawOHnn</textarea>
-				<label name="title" for="title">Title</label>
-				<div class="title">
-					<input class="input_title" type="text" name="title" placeholder="Title (optional)" value="Father John Misty - Fear Fun">
-					<a href="#" class="reset">Clear field</a>
-				</div>
-				<input class="submit_edit float_left" type="submit" value="Save">
-				<p class="button_height float_left no_margin_bottom">or <a class="btn_cancel" href="#">Cancel</a></p>
-				<div class="clearer">
-					<!--clearer-->
-				</div>
-			</form>
-		</div>
+	@Html.Partial("~/Views/Partials/FormAddTrack.cshtml", new Track())
+
+	<div class="item_container">
+
+		@foreach (var track in Model)
+		{
+			@Html.Partial("~/Views/Partials/TrackItemNormal.cshtml", track)
+		}
+	
 	</div>
-}
+	
+</div>

@@ -65,16 +65,16 @@ var Listing = {
 			event.preventDefault();
 			var $this = $(this),
 				$item = $this.parents('.item'),
-				$itemId = $item.attr('id').split('item-')[1],
-				url = 'includes/functions/archive.php';
+				itemId = $item.attr('id').split('item-')[1],
+				url = $this.attr('href');
 
 			$item.find('.controls_container').append('<div class="arc_res" style="opacity:0"><p>Archiving...</p></div>');
-			$('.arc_res', $item).animate({ opacity: 1 }, 300)
+			$('.arc_res', $item).animate({ opacity: 1 }, 300);
 
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: { id: $itemId },
+				data: { id: itemId },
 				success: function () {
 					$('.arc_res', $item).delay(300).animate({ opacity: 0 }, 300, function () {
 						//$('.arc_res p', $item).html('Archived');
@@ -91,7 +91,7 @@ var Listing = {
 			var $this = $(this),
 				$item = $this.parents('.item'),
 				$itemId = $item.attr('id').split('item-')[1],
-				url = 'includes/functions/restore.php';
+				url = $this.attr('href');
 
 			$item.find('.controls_container').append('<div class="arc_res" style="opacity:0"><p>Restoring...</p></div>');
 			$('.arc_res', $item).animate({ opacity: 1 }, 300);
@@ -118,20 +118,24 @@ var Listing = {
 				$itemId = $item.attr('id').split('item-')[1],
 				url = 'includes/functions/delete.php';
 
-			$item.find('.controls_container').append('<div class="delete" style="opacity:0"><p>Deleting...</p></div>');
-			$('.delete', $item).animate({ opacity: 1 }, 300);
+			var confirmed = confirm("Are you sure you want to delete this item?");
 
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: { id: $itemId },
-				success: function () {
-					$('.delete', $item).delay(300).animate({ opacity: 0 }, 300, function () {
-						//$('.arc_res p', $item).html('Deleted');
-						Listing.item_remove($item);
-					});
-				}
-			});
+			if (confirmed) {
+				$item.find('.controls_container').append('<div class="delete" style="opacity:0"><p>Deleting...</p></div>');
+				$('.delete', $item).animate({ opacity: 1 }, 300);
+
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: { id: $itemId },
+					success: function() {
+						$('.delete', $item).delay(300).animate({ opacity: 0 }, 300, function() {
+							//$('.arc_res p', $item).html('Deleted');
+							Listing.item_remove($item);
+						});
+					}
+				});
+			}
 		});
 	},
 

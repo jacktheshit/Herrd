@@ -1,0 +1,44 @@
+﻿@model Herrd.DataLayer.Track
+
+@{
+	var track = Model;
+}
+
+<div id="item-@track.id" class="item match @track.type">
+
+	@RazorLayouts.RenderTitleAndArtwork(track)
+
+	@RazorLayouts.EmbedPlayer(track)
+
+	<div class="controls_container" style="opacity: 1; visibility: visible;">
+		<ul class="controls">
+			<li>
+				@Html.ActionLink("Archive", "AddToArchive", "Home", new { id = track.id }, new { @class = "btn_archive"})
+			</li>
+			<li>
+				<a class="btn_edit" href="#">Edit<span><!--arrow--></span></a>
+			</li>
+			<li>
+				@Html.ActionLink("Delete", "DeleteRecord", "Home", new { id = track.id }, new { @class = "btn_delete"})
+			</li>
+		</ul>
+	</div>
+
+	<div class="form_container">
+		<form id="form_edit_@track.id" action="~/Views/Home/includes/functions/edit.php" method="post">
+			<label name="term" for="term">Link</label>
+			<textarea name="term" placeholder="Add...">@track.term</textarea>
+			<label name="title" for="title">Title</label>
+			<div class="title">
+				<input class="input_title" type="text" name="title" placeholder="Title (optional)" value="@track.title">
+				<a href="#" class="reset">Clear field</a>
+			</div>
+			<input class="submit_edit float_left" type="submit" value="Save">
+			<p class="button_height float_left no_margin_bottom">or <a class="btn_cancel" href="#">Cancel</a></p>
+			<div class="clearer">
+				<!--clearer-->
+			</div>
+		</form>
+	</div>
+
+</div>

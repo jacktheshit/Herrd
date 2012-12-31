@@ -37,6 +37,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -46,52 +47,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HerrdModel.Context.cs">
+    <Compile Include="HerrdDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>HerrdModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HerrdModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HerrdModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HerrdModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HerrdModel.edmx</DependentUpon>
+      <DependentUpon>HerrdDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Track.cs">
-      <DependentUpon>HerrdModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>HerrdModel.tt</DependentUpon>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="HerrdModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>HerrdModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="HerrdModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HerrdModel.edmx</DependentUpon>
-      <LastGenOutput>HerrdModel.Context.cs</LastGenOutput>
-    </None>
-    <None Include="HerrdModel.edmx.diagram">
-      <DependentUpon>HerrdModel.edmx</DependentUpon>
-    </None>
-    <None Include="HerrdModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HerrdModel.edmx</DependentUpon>
-      <LastGenOutput>HerrdModel.cs</LastGenOutput>
+    <None Include="HerrdDB.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>HerrdDB.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="HerrdDB.dbml.layout">
+      <DependentUpon>HerrdDB.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

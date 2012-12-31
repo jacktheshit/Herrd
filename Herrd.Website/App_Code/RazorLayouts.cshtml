@@ -1,0 +1,68 @@
+﻿@using Herrd.DataLayer
+
+@helper EmbedPlayer (Track track) {
+	
+	string term = track.term;
+	string type = track.type;
+	string embedUrl = track.embed_url;
+	
+	if(!String.IsNullOrEmpty(term))
+	{
+		switch (type)
+		{
+			case "spotify": @Spotify(embedUrl)
+			break;
+			case "soundcloud": @SoundCloud(embedUrl)
+			break;
+			case "vimeo": @Vimeo(embedUrl)
+			break;
+			case "youtube": @Youtube(embedUrl)
+			break;
+		}
+	}
+	
+}
+
+@helper Spotify (string embedUrl){
+	<div class="expand loader" data-src="@embedUrl">
+		<div class="inner">
+			<iframe width="512" height="592" frameborder="0" allowtransparency="true"></iframe>
+		</div>
+	</div>
+}
+
+@helper SoundCloud (string embedUrl){
+	<div class="expand loader" data-src="@embedUrl">
+		<div class="inner">
+			<iframe width="100%" height="384" scrolling="no" frameborder="no"></iframe>
+		</div>
+	</div>
+}
+
+@helper Vimeo (string embedUrl){
+	<div class="expand loader" data-src="@embedUrl">
+		<div class="inner">
+			<iframe width="512" height="288" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+		</div>
+	</div>
+}
+
+@helper Youtube (string embedUrl){
+	<div class="expand loader" data-src="@embedUrl">
+		<div class="inner">
+			<iframe width="512" height="288" frameborder="0" allowfullscreen></iframe>
+		</div>
+	</div>
+}
+
+@helper RenderTitleAndArtwork (Track track){
+	<div class="media">
+		<div class="med_l artwork">
+			<img src="@track.artwork" alt="@track.title">
+		</div>
+		<div class="bd">
+			<h2>@track.title</h2>
+			<p class="date no_margin_bottom">@track.date.Value.ToString("dd MMMM yyyy")</p>
+		</div>
+	</div>
+}

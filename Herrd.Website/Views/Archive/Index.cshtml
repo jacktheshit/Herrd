@@ -1,0 +1,36 @@
+﻿@model List<Herrd.DataLayer.Track>
+
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/_layout.cshtml";
+}
+
+<div class="site_container">
+
+	<div class="item_container">
+
+		@foreach (var track in Model)
+		{
+			<div id="item-@track.id" class="item match @track.type">
+				
+				@RazorLayouts.RenderTitleAndArtwork(track)
+
+				@RazorLayouts.EmbedPlayer(track)
+
+				<div class="controls_container" style="opacity: 1; visibility: visible;">
+					<ul class="controls">
+						<li>
+							@Html.ActionLink("Restore", "RestoreFromArchive", "Home", new { id = track.id }, new { @class = "btn_restore"})
+						</li>
+						<li>
+							@Html.ActionLink("Delete", "DeleteRecord", "Home", new { id = track.id }, new { @class = "btn_delete"})
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		}
+	
+	</div>
+	
+</div>
