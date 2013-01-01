@@ -30,12 +30,12 @@ namespace Herrd.DataLayer
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertUser(User instance);
-    partial void UpdateUser(User instance);
-    partial void DeleteUser(User instance);
     partial void InsertTrack(Track instance);
     partial void UpdateTrack(Track instance);
     partial void DeleteTrack(Track instance);
+    partial void InsertUser(User instance);
+    partial void UpdateUser(User instance);
+    partial void DeleteUser(User instance);
     #endregion
 		
 		public HerrdDBDataContext() : 
@@ -68,14 +68,6 @@ namespace Herrd.DataLayer
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<User> Users
-		{
-			get
-			{
-				return this.GetTable<User>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Track> Tracks
 		{
 			get
@@ -83,167 +75,13 @@ namespace Herrd.DataLayer
 				return this.GetTable<Track>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
-	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private string _first_name;
-		
-		private string _last_name;
-		
-		private string _email;
-		
-		private EntitySet<Track> _Tracks;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Onfirst_nameChanging(string value);
-    partial void Onfirst_nameChanged();
-    partial void Onlast_nameChanging(string value);
-    partial void Onlast_nameChanged();
-    partial void OnemailChanging(string value);
-    partial void OnemailChanged();
-    #endregion
-		
-		public User()
-		{
-			this._Tracks = new EntitySet<Track>(new Action<Track>(this.attach_Tracks), new Action<Track>(this.detach_Tracks));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
+		public System.Data.Linq.Table<User> Users
 		{
 			get
 			{
-				return this._id;
+				return this.GetTable<User>();
 			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_first_name", DbType="NVarChar(50)")]
-		public string first_name
-		{
-			get
-			{
-				return this._first_name;
-			}
-			set
-			{
-				if ((this._first_name != value))
-				{
-					this.Onfirst_nameChanging(value);
-					this.SendPropertyChanging();
-					this._first_name = value;
-					this.SendPropertyChanged("first_name");
-					this.Onfirst_nameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last_name", DbType="NVarChar(50)")]
-		public string last_name
-		{
-			get
-			{
-				return this._last_name;
-			}
-			set
-			{
-				if ((this._last_name != value))
-				{
-					this.Onlast_nameChanging(value);
-					this.SendPropertyChanging();
-					this._last_name = value;
-					this.SendPropertyChanged("last_name");
-					this.Onlast_nameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="NVarChar(50)")]
-		public string email
-		{
-			get
-			{
-				return this._email;
-			}
-			set
-			{
-				if ((this._email != value))
-				{
-					this.OnemailChanging(value);
-					this.SendPropertyChanging();
-					this._email = value;
-					this.SendPropertyChanged("email");
-					this.OnemailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Track", Storage="_Tracks", ThisKey="id", OtherKey="user_id")]
-		public EntitySet<Track> Tracks
-		{
-			get
-			{
-				return this._Tracks;
-			}
-			set
-			{
-				this._Tracks.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Tracks(Track entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Tracks(Track entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
 		}
 	}
 	
@@ -563,6 +401,360 @@ namespace Herrd.DataLayer
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
+	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private string _first_name;
+		
+		private string _last_name;
+		
+		private string _email;
+		
+		private string _password;
+		
+		private bool _isApproved;
+		
+		private string _user_name;
+		
+		private System.Nullable<System.DateTime> _lastActivityDate;
+		
+		private System.Nullable<System.DateTime> _lastLoginDate;
+		
+		private System.Nullable<System.DateTime> _creationDate;
+		
+		private System.Nullable<bool> _isOnline;
+		
+		private string _userRole;
+		
+		private EntitySet<Track> _Tracks;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Onfirst_nameChanging(string value);
+    partial void Onfirst_nameChanged();
+    partial void Onlast_nameChanging(string value);
+    partial void Onlast_nameChanged();
+    partial void OnemailChanging(string value);
+    partial void OnemailChanged();
+    partial void OnpasswordChanging(string value);
+    partial void OnpasswordChanged();
+    partial void OnisApprovedChanging(bool value);
+    partial void OnisApprovedChanged();
+    partial void Onuser_nameChanging(string value);
+    partial void Onuser_nameChanged();
+    partial void OnlastActivityDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnlastActivityDateChanged();
+    partial void OnlastLoginDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnlastLoginDateChanged();
+    partial void OncreationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OncreationDateChanged();
+    partial void OnisOnlineChanging(System.Nullable<bool> value);
+    partial void OnisOnlineChanged();
+    partial void OnuserRoleChanging(string value);
+    partial void OnuserRoleChanged();
+    #endregion
+		
+		public User()
+		{
+			this._Tracks = new EntitySet<Track>(new Action<Track>(this.attach_Tracks), new Action<Track>(this.detach_Tracks));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_first_name", DbType="NVarChar(50)")]
+		public string first_name
+		{
+			get
+			{
+				return this._first_name;
+			}
+			set
+			{
+				if ((this._first_name != value))
+				{
+					this.Onfirst_nameChanging(value);
+					this.SendPropertyChanging();
+					this._first_name = value;
+					this.SendPropertyChanged("first_name");
+					this.Onfirst_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last_name", DbType="NVarChar(50)")]
+		public string last_name
+		{
+			get
+			{
+				return this._last_name;
+			}
+			set
+			{
+				if ((this._last_name != value))
+				{
+					this.Onlast_nameChanging(value);
+					this.SendPropertyChanging();
+					this._last_name = value;
+					this.SendPropertyChanged("last_name");
+					this.Onlast_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="NVarChar(50)")]
+		public string email
+		{
+			get
+			{
+				return this._email;
+			}
+			set
+			{
+				if ((this._email != value))
+				{
+					this.OnemailChanging(value);
+					this.SendPropertyChanging();
+					this._email = value;
+					this.SendPropertyChanged("email");
+					this.OnemailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_password", DbType="NVarChar(50)")]
+		public string password
+		{
+			get
+			{
+				return this._password;
+			}
+			set
+			{
+				if ((this._password != value))
+				{
+					this.OnpasswordChanging(value);
+					this.SendPropertyChanging();
+					this._password = value;
+					this.SendPropertyChanged("password");
+					this.OnpasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isApproved", DbType="Bit NOT NULL")]
+		public bool isApproved
+		{
+			get
+			{
+				return this._isApproved;
+			}
+			set
+			{
+				if ((this._isApproved != value))
+				{
+					this.OnisApprovedChanging(value);
+					this.SendPropertyChanging();
+					this._isApproved = value;
+					this.SendPropertyChanged("isApproved");
+					this.OnisApprovedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_name", DbType="NVarChar(150)")]
+		public string user_name
+		{
+			get
+			{
+				return this._user_name;
+			}
+			set
+			{
+				if ((this._user_name != value))
+				{
+					this.Onuser_nameChanging(value);
+					this.SendPropertyChanging();
+					this._user_name = value;
+					this.SendPropertyChanged("user_name");
+					this.Onuser_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastActivityDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> lastActivityDate
+		{
+			get
+			{
+				return this._lastActivityDate;
+			}
+			set
+			{
+				if ((this._lastActivityDate != value))
+				{
+					this.OnlastActivityDateChanging(value);
+					this.SendPropertyChanging();
+					this._lastActivityDate = value;
+					this.SendPropertyChanged("lastActivityDate");
+					this.OnlastActivityDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastLoginDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> lastLoginDate
+		{
+			get
+			{
+				return this._lastLoginDate;
+			}
+			set
+			{
+				if ((this._lastLoginDate != value))
+				{
+					this.OnlastLoginDateChanging(value);
+					this.SendPropertyChanging();
+					this._lastLoginDate = value;
+					this.SendPropertyChanged("lastLoginDate");
+					this.OnlastLoginDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_creationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> creationDate
+		{
+			get
+			{
+				return this._creationDate;
+			}
+			set
+			{
+				if ((this._creationDate != value))
+				{
+					this.OncreationDateChanging(value);
+					this.SendPropertyChanging();
+					this._creationDate = value;
+					this.SendPropertyChanged("creationDate");
+					this.OncreationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isOnline", DbType="Bit")]
+		public System.Nullable<bool> isOnline
+		{
+			get
+			{
+				return this._isOnline;
+			}
+			set
+			{
+				if ((this._isOnline != value))
+				{
+					this.OnisOnlineChanging(value);
+					this.SendPropertyChanging();
+					this._isOnline = value;
+					this.SendPropertyChanged("isOnline");
+					this.OnisOnlineChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userRole", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string userRole
+		{
+			get
+			{
+				return this._userRole;
+			}
+			set
+			{
+				if ((this._userRole != value))
+				{
+					this.OnuserRoleChanging(value);
+					this.SendPropertyChanging();
+					this._userRole = value;
+					this.SendPropertyChanged("userRole");
+					this.OnuserRoleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Track", Storage="_Tracks", ThisKey="id", OtherKey="user_id")]
+		public EntitySet<Track> Tracks
+		{
+			get
+			{
+				return this._Tracks;
+			}
+			set
+			{
+				this._Tracks.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Tracks(Track entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Tracks(Track entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
 		}
 	}
 }

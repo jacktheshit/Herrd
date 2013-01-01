@@ -2,15 +2,15 @@
 using System.Configuration.Provider;
 using System.Collections.Specialized;
 using System;
+using System.Linq;
 using System.Data;
 using System.Data.Odbc;
 using System.Configuration;
 using System.Diagnostics;
-using System.Web;
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Configuration;
+using Herrd.DataLayer;
 
 /*
 
@@ -49,30 +49,32 @@ namespace Herrd.Extensions.Providers.Members
 	public sealed class HerrdMembershipProvider : MembershipProvider
 	{
 
+		private HerrdDBDataContext _dbDataContext;
+
 		//
 		// Global connection string, generated password length, generic exception message, event log info.
 		//
-		private int newPasswordLength = 8;
-		private string eventSource = "OdbcMembershipProvider";
-		private string eventLog = "Application";
-		private string exceptionMessage = "An exception occurred. Please check the Event Log.";
-		private string connectionString;
+		private const int NewPasswordLength = 8;
+		private const string EventSource = "HerrdMembershipProvider";
+		private const string EventLog = "Application";
+		private const string ExceptionMessage = "An exception occurred. Please check the Event Log.";
+		private string _connectionString;
 
 		//
 		// Used when determining encryption key values.
 		//
-		private MachineKeySection machineKey;
+		private MachineKeySection _machineKey;
 
 		//
 		// If false, exceptions are thrown to the caller. If true,
 		// exceptions are written to the event log.
 		//
-		private bool pWriteExceptionsToEventLog;
+		private bool _pWriteExceptionsToEventLog;
 
 		public bool WriteExceptionsToEventLog
 		{
-			get { return pWriteExceptionsToEventLog; }
-			set { pWriteExceptionsToEventLog = value; }
+			get { return _pWriteExceptionsToEventLog; }
+			set { _pWriteExceptionsToEventLog = value; }
 		}
 
 
@@ -82,6 +84,10 @@ namespace Herrd.Extensions.Providers.Members
 
 		public override void Initialize(string name, NameValueCollection config)
 		{
+
+			//init dbContext
+			_dbDataContext = new HerrdDBDataContext();
+
 			//
 			// Initialize values from web.config.
 			//
@@ -89,47 +95,43 @@ namespace Herrd.Extensions.Providers.Members
 			if (config == null)
 				throw new ArgumentNullException("config");
 
-			if (name == null || name.Length == 0)
-				name = "OdbcMembershipProvider";
+			if (name.Length == 0)
+				name = "HerrdMembershipProvider";
 
 			if (String.IsNullOrEmpty(config["description"]))
 			{
 				config.Remove("description");
-				config.Add("description", "Sample ODBC Membership provider");
+				config.Add("description", "Herrd Membership provider");
 			}
 
 			// Initialize the abstract base class.
 			base.Initialize(name, config);
 
-			pApplicationName = GetConfigValue(config["applicationName"],
+			_pApplicationName = GetConfigValue(config["applicationName"],
 											System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-			pMaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(config["maxInvalidPasswordAttempts"], "5"));
-			pPasswordAttemptWindow = Convert.ToInt32(GetConfigValue(config["passwordAttemptWindow"], "10"));
-			pMinRequiredNonAlphanumericCharacters = Convert.ToInt32(GetConfigValue(config["minRequiredNonAlphanumericCharacters"], "1"));
-			pMinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(config["minRequiredPasswordLength"], "7"));
-			pPasswordStrengthRegularExpression = Convert.ToString(GetConfigValue(config["passwordStrengthRegularExpression"], ""));
-			pEnablePasswordReset = Convert.ToBoolean(GetConfigValue(config["enablePasswordReset"], "true"));
-			pEnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(config["enablePasswordRetrieval"], "true"));
-			pRequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
-			pRequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(config["requiresUniqueEmail"], "true"));
-			pWriteExceptionsToEventLog = Convert.ToBoolean(GetConfigValue(config["writeExceptionsToEventLog"], "true"));
+			_pMaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(config["maxInvalidPasswordAttempts"], "5"));
+			_pPasswordAttemptWindow = Convert.ToInt32(GetConfigValue(config["passwordAttemptWindow"], "10"));
+			_pMinRequiredNonAlphanumericCharacters = Convert.ToInt32(GetConfigValue(config["minRequiredNonAlphanumericCharacters"], "1"));
+			_pMinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(config["minRequiredPasswordLength"], "7"));
+			_pPasswordStrengthRegularExpression = Convert.ToString(GetConfigValue(config["passwordStrengthRegularExpression"], ""));
+			_pEnablePasswordReset = Convert.ToBoolean(GetConfigValue(config["enablePasswordReset"], "true"));
+			_pEnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(config["enablePasswordRetrieval"], "true"));
+			_pRequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
+			_pRequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(config["requiresUniqueEmail"], "true"));
+			_pWriteExceptionsToEventLog = Convert.ToBoolean(GetConfigValue(config["writeExceptionsToEventLog"], "true"));
 
-			string temp_format = config["passwordFormat"];
-			if (temp_format == null)
-			{
-				temp_format = "Hashed";
-			}
+			string tempFormat = config["passwordFormat"] ?? "Hashed";
 
-			switch (temp_format)
+			switch (tempFormat)
 			{
 				case "Hashed":
-					pPasswordFormat = MembershipPasswordFormat.Hashed;
+					_pPasswordFormat = MembershipPasswordFormat.Hashed;
 					break;
 				case "Encrypted":
-					pPasswordFormat = MembershipPasswordFormat.Encrypted;
+					_pPasswordFormat = MembershipPasswordFormat.Encrypted;
 					break;
 				case "Clear":
-					pPasswordFormat = MembershipPasswordFormat.Clear;
+					_pPasswordFormat = MembershipPasswordFormat.Clear;
 					break;
 				default:
 					throw new ProviderException("Password format not supported.");
@@ -139,23 +141,23 @@ namespace Herrd.Extensions.Providers.Members
 			// Initialize OdbcConnection.
 			//
 
-			ConnectionStringSettings ConnectionStringSettings =
+			ConnectionStringSettings connectionStringSettings =
 			  ConfigurationManager.ConnectionStrings[config["connectionStringName"]];
 
-			if (ConnectionStringSettings == null || ConnectionStringSettings.ConnectionString.Trim() == "")
+			if (connectionStringSettings == null || connectionStringSettings.ConnectionString.Trim() == "")
 			{
 				throw new ProviderException("Connection string cannot be blank.");
 			}
 
-			connectionString = ConnectionStringSettings.ConnectionString;
+			_connectionString = connectionStringSettings.ConnectionString;
 
 
 			// Get encryption and decryption key information from the configuration.
 			Configuration cfg =
 			  WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-			machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
+			_machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
 
-			if (machineKey.ValidationKey.Contains("AutoGenerate"))
+			if (_machineKey.ValidationKey.Contains("AutoGenerate"))
 				if (PasswordFormat != MembershipPasswordFormat.Clear)
 					throw new ProviderException("Hashed or Encrypted passwords " +
 												"are not supported with auto-generated keys.");
@@ -180,75 +182,75 @@ namespace Herrd.Extensions.Providers.Members
 		//
 
 
-		private string pApplicationName;
-		private bool pEnablePasswordReset;
-		private bool pEnablePasswordRetrieval;
-		private bool pRequiresQuestionAndAnswer;
-		private bool pRequiresUniqueEmail;
-		private int pMaxInvalidPasswordAttempts;
-		private int pPasswordAttemptWindow;
-		private MembershipPasswordFormat pPasswordFormat;
+		private string _pApplicationName;
+		private bool _pEnablePasswordReset;
+		private bool _pEnablePasswordRetrieval;
+		private bool _pRequiresQuestionAndAnswer;
+		private bool _pRequiresUniqueEmail;
+		private int _pMaxInvalidPasswordAttempts;
+		private int _pPasswordAttemptWindow;
+		private MembershipPasswordFormat _pPasswordFormat;
 
 		public override string ApplicationName
 		{
-			get { return pApplicationName; }
-			set { pApplicationName = value; }
+			get { return _pApplicationName; }
+			set { _pApplicationName = value; }
 		}
 
 		public override bool EnablePasswordReset
 		{
-			get { return pEnablePasswordReset; }
+			get { return _pEnablePasswordReset; }
 		}
 
 		public override bool EnablePasswordRetrieval
 		{
-			get { return pEnablePasswordRetrieval; }
+			get { return _pEnablePasswordRetrieval; }
 		}
 
 		public override bool RequiresQuestionAndAnswer
 		{
-			get { return pRequiresQuestionAndAnswer; }
+			get { return _pRequiresQuestionAndAnswer; }
 		}
 
 		public override bool RequiresUniqueEmail
 		{
-			get { return pRequiresUniqueEmail; }
+			get { return _pRequiresUniqueEmail; }
 		}
 
 		public override int MaxInvalidPasswordAttempts
 		{
-			get { return pMaxInvalidPasswordAttempts; }
+			get { return _pMaxInvalidPasswordAttempts; }
 		}
 
 		public override int PasswordAttemptWindow
 		{
-			get { return pPasswordAttemptWindow; }
+			get { return _pPasswordAttemptWindow; }
 		}
 
 		public override MembershipPasswordFormat PasswordFormat
 		{
-			get { return pPasswordFormat; }
+			get { return _pPasswordFormat; }
 		}
 
-		private int pMinRequiredNonAlphanumericCharacters;
+		private int _pMinRequiredNonAlphanumericCharacters;
 
 		public override int MinRequiredNonAlphanumericCharacters
 		{
-			get { return pMinRequiredNonAlphanumericCharacters; }
+			get { return _pMinRequiredNonAlphanumericCharacters; }
 		}
 
-		private int pMinRequiredPasswordLength;
+		private int _pMinRequiredPasswordLength;
 
 		public override int MinRequiredPasswordLength
 		{
-			get { return pMinRequiredPasswordLength; }
+			get { return _pMinRequiredPasswordLength; }
 		}
 
-		private string pPasswordStrengthRegularExpression;
+		private string _pPasswordStrengthRegularExpression;
 
 		public override string PasswordStrengthRegularExpression
 		{
-			get { return pPasswordStrengthRegularExpression; }
+			get { return _pPasswordStrengthRegularExpression; }
 		}
 
 		//
@@ -264,9 +266,7 @@ namespace Herrd.Extensions.Providers.Members
 			if (!ValidateUser(username, oldPwd))
 				return false;
 
-
-			ValidatePasswordEventArgs args =
-			  new ValidatePasswordEventArgs(username, newPwd, true);
+			ValidatePasswordEventArgs args = new ValidatePasswordEventArgs(username, newPwd, true);
 
 			OnValidatingPassword(args);
 
@@ -276,50 +276,22 @@ namespace Herrd.Extensions.Providers.Members
 				else
 					throw new MembershipPasswordException("Change password canceled due to new password validation failure.");
 
-
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("UPDATE Users " +
-					" SET Password = ?, LastPasswordChangedDate = ? " +
-					" WHERE Username = ? AND ApplicationName = ?", conn);
-
-			cmd.Parameters.Add("@Password", OdbcType.VarChar, 255).Value = EncodePassword(newPwd);
-			cmd.Parameters.Add("@LastPasswordChangedDate", OdbcType.DateTime).Value = DateTime.Now;
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-
-			int rowsAffected = 0;
+			//get user and update password
+			User user = _dbDataContext.Users.FirstOrDefault(u => u.user_name == username);
+			if (user == null) return false;
+			user.password = EncodePassword(newPwd);
 
 			try
 			{
-				conn.Open();
-
-				rowsAffected = cmd.ExecuteNonQuery();
+				_dbDataContext.SubmitChanges();
 			}
-			catch (OdbcException e)
+			catch(Exception e)
 			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "ChangePassword");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				conn.Close();
+				return false;
 			}
 
-			if (rowsAffected > 0)
-			{
-				return true;
-			}
+			return true;
 
-			return false;
 		}
 
 
@@ -336,7 +308,7 @@ namespace Herrd.Extensions.Providers.Members
 			if (!ValidateUser(username, password))
 				return false;
 
-			OdbcConnection conn = new OdbcConnection(connectionString);
+			OdbcConnection conn = new OdbcConnection(_connectionString);
 			OdbcCommand cmd = new OdbcCommand("UPDATE Users " +
 					" SET PasswordQuestion = ?, PasswordAnswer = ?" +
 					" WHERE Username = ? AND ApplicationName = ?", conn);
@@ -344,7 +316,7 @@ namespace Herrd.Extensions.Providers.Members
 			cmd.Parameters.Add("@Question", OdbcType.VarChar, 255).Value = newPwdQuestion;
 			cmd.Parameters.Add("@Answer", OdbcType.VarChar, 255).Value = EncodePassword(newPwdAnswer);
 			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = _pApplicationName;
 
 
 			int rowsAffected = 0;
@@ -361,7 +333,7 @@ namespace Herrd.Extensions.Providers.Members
 				{
 					WriteToEventLog(e, "ChangePasswordQuestionAndAnswer");
 
-					throw new ProviderException(exceptionMessage);
+					throw new ProviderException(ExceptionMessage);
 				}
 				else
 				{
@@ -380,7 +352,6 @@ namespace Herrd.Extensions.Providers.Members
 
 			return false;
 		}
-
 
 
 		//
@@ -407,8 +378,6 @@ namespace Herrd.Extensions.Providers.Members
 				return null;
 			}
 
-
-
 			if (RequiresUniqueEmail && GetUserNameByEmail(email) != "")
 			{
 				status = MembershipCreateStatus.DuplicateEmail;
@@ -421,77 +390,31 @@ namespace Herrd.Extensions.Providers.Members
 			{
 				DateTime createDate = DateTime.Now;
 
-				if (providerUserKey == null)
+				User newUser = new User
 				{
-					providerUserKey = Guid.NewGuid();
-				}
-				else
-				{
-					if (!(providerUserKey is Guid))
-					{
-						status = MembershipCreateStatus.InvalidProviderUserKey;
-						return null;
-					}
-				}
-
-				OdbcConnection conn = new OdbcConnection(connectionString);
-				OdbcCommand cmd = new OdbcCommand("INSERT INTO Users " +
-					  " (PKID, Username, Password, Email, PasswordQuestion, " +
-					  " PasswordAnswer, IsApproved," +
-					  " Comment, CreationDate, LastPasswordChangedDate, LastActivityDate," +
-					  " ApplicationName, IsLockedOut, LastLockedOutDate," +
-					  " FailedPasswordAttemptCount, FailedPasswordAttemptWindowStart, " +
-					  " FailedPasswordAnswerAttemptCount, FailedPasswordAnswerAttemptWindowStart)" +
-					  " Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", conn);
-
-				cmd.Parameters.Add("@PKID", OdbcType.UniqueIdentifier).Value = providerUserKey;
-				cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-				cmd.Parameters.Add("@Password", OdbcType.VarChar, 255).Value = EncodePassword(password);
-				cmd.Parameters.Add("@Email", OdbcType.VarChar, 128).Value = email;
-				cmd.Parameters.Add("@PasswordQuestion", OdbcType.VarChar, 255).Value = passwordQuestion;
-				cmd.Parameters.Add("@PasswordAnswer", OdbcType.VarChar, 255).Value = EncodePassword(passwordAnswer);
-				cmd.Parameters.Add("@IsApproved", OdbcType.Bit).Value = isApproved;
-				cmd.Parameters.Add("@Comment", OdbcType.VarChar, 255).Value = "";
-				cmd.Parameters.Add("@CreationDate", OdbcType.DateTime).Value = createDate;
-				cmd.Parameters.Add("@LastPasswordChangedDate", OdbcType.DateTime).Value = createDate;
-				cmd.Parameters.Add("@LastActivityDate", OdbcType.DateTime).Value = createDate;
-				cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-				cmd.Parameters.Add("@IsLockedOut", OdbcType.Bit).Value = false;
-				cmd.Parameters.Add("@LastLockedOutDate", OdbcType.DateTime).Value = createDate;
-				cmd.Parameters.Add("@FailedPasswordAttemptCount", OdbcType.Int).Value = 0;
-				cmd.Parameters.Add("@FailedPasswordAttemptWindowStart", OdbcType.DateTime).Value = createDate;
-				cmd.Parameters.Add("@FailedPasswordAnswerAttemptCount", OdbcType.Int).Value = 0;
-				cmd.Parameters.Add("@FailedPasswordAnswerAttemptWindowStart", OdbcType.DateTime).Value = createDate;
+					user_name = username,
+					password = EncodePassword(password),
+					email = email,
+					creationDate = createDate,
+					lastActivityDate = createDate,
+					lastLoginDate = createDate,
+					first_name = "",
+					last_name = "",
+					isApproved = isApproved,
+					userRole = HeerdRoleProvider.RoleType.User.GetRoleType()
+				};
 
 				try
 				{
-					conn.Open();
-
-					int recAdded = cmd.ExecuteNonQuery();
-
-					if (recAdded > 0)
-					{
-						status = MembershipCreateStatus.Success;
-					}
-					else
-					{
-						status = MembershipCreateStatus.UserRejected;
-					}
+					_dbDataContext.Users.InsertOnSubmit(newUser);
+					_dbDataContext.SubmitChanges();
+					status = MembershipCreateStatus.Success;
 				}
-				catch (OdbcException e)
+				catch (Exception e)
 				{
-					if (WriteExceptionsToEventLog)
-					{
-						WriteToEventLog(e, "CreateUser");
-					}
-
 					status = MembershipCreateStatus.ProviderError;
+					throw new Exception(e.Message);
 				}
-				finally
-				{
-					conn.Close();
-				}
-
 
 				return GetUser(username, false);
 			}
@@ -504,56 +427,36 @@ namespace Herrd.Extensions.Providers.Members
 			return null;
 		}
 
-
-
 		//
 		// MembershipProvider.DeleteUser
 		//
 
 		public override bool DeleteUser(string username, bool deleteAllRelatedData)
 		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("DELETE FROM Users " +
-					" WHERE Username = ? AND Applicationname = ?", conn);
 
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+			User userToDelete = _dbDataContext.Users.FirstOrDefault(u => u.user_name == username);
+			if (userToDelete == null) return false;
 
-			int rowsAffected = 0;
+			//delete tracks
+			var usersTracks = _dbDataContext.Tracks.Where(x => x.user_id == userToDelete.id);
+			foreach (var usersTrack in usersTracks)
+			{
+				_dbDataContext.Tracks.DeleteOnSubmit(usersTrack);
+			}
+
+			//delete user
+			_dbDataContext.Users.DeleteOnSubmit(userToDelete);
 
 			try
 			{
-				conn.Open();
-
-				rowsAffected = cmd.ExecuteNonQuery();
-
-				if (deleteAllRelatedData)
-				{
-					// Process commands to delete all data for the user in the database.
-				}
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "DeleteUser");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				conn.Close();
-			}
-
-			if (rowsAffected > 0)
+				_dbDataContext.SubmitChanges();
 				return true;
+			}
+			catch (Exception)
+			{
 
-			return false;
+				return false;
+			}
 		}
 
 
@@ -564,7 +467,7 @@ namespace Herrd.Extensions.Providers.Members
 
 		public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
 		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
+			OdbcConnection conn = new OdbcConnection(_connectionString);
 			OdbcCommand cmd = new OdbcCommand("SELECT Count(*) FROM Users " +
 											  "WHERE ApplicationName = ?", conn);
 			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = ApplicationName;
@@ -598,8 +501,8 @@ namespace Herrd.Extensions.Providers.Members
 				{
 					if (counter >= startIndex)
 					{
-						MembershipUser u = GetUserFromReader(reader);
-						users.Add(u);
+						//MembershipUser u = GetUserFromReader(reader);
+						//users.Add(u);
 					}
 
 					if (counter >= endIndex) { cmd.Cancel(); }
@@ -613,7 +516,7 @@ namespace Herrd.Extensions.Providers.Members
 				{
 					WriteToEventLog(e, "GetAllUsers ");
 
-					throw new ProviderException(exceptionMessage);
+					throw new ProviderException(ExceptionMessage);
 				}
 				else
 				{
@@ -640,12 +543,12 @@ namespace Herrd.Extensions.Providers.Members
 			TimeSpan onlineSpan = new TimeSpan(0, System.Web.Security.Membership.UserIsOnlineTimeWindow, 0);
 			DateTime compareTime = DateTime.Now.Subtract(onlineSpan);
 
-			OdbcConnection conn = new OdbcConnection(connectionString);
+			OdbcConnection conn = new OdbcConnection(_connectionString);
 			OdbcCommand cmd = new OdbcCommand("SELECT Count(*) FROM Users " +
 					" WHERE LastActivityDate > ? AND ApplicationName = ?", conn);
 
 			cmd.Parameters.Add("@CompareDate", OdbcType.DateTime).Value = compareTime;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = _pApplicationName;
 
 			int numOnline = 0;
 
@@ -661,7 +564,7 @@ namespace Herrd.Extensions.Providers.Members
 				{
 					WriteToEventLog(e, "GetNumberOfUsersOnline");
 
-					throw new ProviderException(exceptionMessage);
+					throw new ProviderException(ExceptionMessage);
 				}
 				else
 				{
@@ -675,7 +578,6 @@ namespace Herrd.Extensions.Providers.Members
 
 			return numOnline;
 		}
-
 
 
 		//
@@ -694,65 +596,18 @@ namespace Herrd.Extensions.Providers.Members
 				throw new ProviderException("Cannot retrieve Hashed passwords.");
 			}
 
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT Password, PasswordAnswer, IsLockedOut FROM Users " +
-				  " WHERE Username = ? AND ApplicationName = ?", conn);
-
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+			User user = _dbDataContext.Users.FirstOrDefault(x => x.user_name == username);
 
 			string password = "";
-			string passwordAnswer = "";
-			OdbcDataReader reader = null;
 
-			try
+			if (user == null)
 			{
-				conn.Open();
-
-				reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
-
-				if (reader.HasRows)
-				{
-					reader.Read();
-
-					if (reader.GetBoolean(2))
-						throw new MembershipPasswordException("The supplied user is locked out.");
-
-					password = reader.GetString(0);
-					passwordAnswer = reader.GetString(1);
-				}
-				else
-				{
-					throw new MembershipPasswordException("The supplied user name is not found.");
-				}
+				throw new MembershipPasswordException("The supplied user name is not found.");
 			}
-			catch (OdbcException e)
+			else
 			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "GetPassword");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
+				password = user.password;
 			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-				conn.Close();
-			}
-
-
-			if (RequiresQuestionAndAnswer && !CheckPassword(answer, passwordAnswer))
-			{
-				UpdateFailureCount(username, "passwordAnswer");
-
-				throw new MembershipPasswordException("Incorrect password answer.");
-			}
-
 
 			if (PasswordFormat == MembershipPasswordFormat.Encrypted)
 			{
@@ -762,294 +617,10 @@ namespace Herrd.Extensions.Providers.Members
 			return password;
 		}
 
-
-
-		//
-		// MembershipProvider.GetUser(string, bool)
-		//
-
-		public override MembershipUser GetUser(string username, bool userIsOnline)
-		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT PKID, Username, Email, PasswordQuestion," +
-				 " Comment, IsApproved, IsLockedOut, CreationDate, LastLoginDate," +
-				 " LastActivityDate, LastPasswordChangedDate, LastLockedOutDate" +
-				 " FROM Users WHERE Username = ? AND ApplicationName = ?", conn);
-
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-			MembershipUser u = null;
-			OdbcDataReader reader = null;
-
-			try
-			{
-				conn.Open();
-
-				reader = cmd.ExecuteReader();
-
-				if (reader.HasRows)
-				{
-					reader.Read();
-					u = GetUserFromReader(reader);
-
-					if (userIsOnline)
-					{
-						OdbcCommand updateCmd = new OdbcCommand("UPDATE Users " +
-								  "SET LastActivityDate = ? " +
-								  "WHERE Username = ? AND Applicationname = ?", conn);
-
-						updateCmd.Parameters.Add("@LastActivityDate", OdbcType.DateTime).Value = DateTime.Now;
-						updateCmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-						updateCmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-						updateCmd.ExecuteNonQuery();
-					}
-				}
-
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "GetUser(String, Boolean)");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-
-				conn.Close();
-			}
-
-			return u;
-		}
-
-
-		//
-		// MembershipProvider.GetUser(object, bool)
-		//
-
-		public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
-		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT PKID, Username, Email, PasswordQuestion," +
-				  " Comment, IsApproved, IsLockedOut, CreationDate, LastLoginDate," +
-				  " LastActivityDate, LastPasswordChangedDate, LastLockedOutDate" +
-				  " FROM Users WHERE PKID = ?", conn);
-
-			cmd.Parameters.Add("@PKID", OdbcType.UniqueIdentifier).Value = providerUserKey;
-
-			MembershipUser u = null;
-			OdbcDataReader reader = null;
-
-			try
-			{
-				conn.Open();
-
-				reader = cmd.ExecuteReader();
-
-				if (reader.HasRows)
-				{
-					reader.Read();
-					u = GetUserFromReader(reader);
-
-					if (userIsOnline)
-					{
-						OdbcCommand updateCmd = new OdbcCommand("UPDATE Users " +
-								  "SET LastActivityDate = ? " +
-								  "WHERE PKID = ?", conn);
-
-						updateCmd.Parameters.Add("@LastActivityDate", OdbcType.DateTime).Value = DateTime.Now;
-						updateCmd.Parameters.Add("@PKID", OdbcType.UniqueIdentifier).Value = providerUserKey;
-
-						updateCmd.ExecuteNonQuery();
-					}
-				}
-
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "GetUser(Object, Boolean)");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-
-				conn.Close();
-			}
-
-			return u;
-		}
-
-
-		//
-		// GetUserFromReader
-		//    A helper function that takes the current row from the OdbcDataReader
-		// and hydrates a MembershiUser from the values. Called by the 
-		// MembershipUser.GetUser implementation.
-		//
-
-		private MembershipUser GetUserFromReader(OdbcDataReader reader)
-		{
-			object providerUserKey = reader.GetValue(0);
-			string username = reader.GetString(1);
-			string email = reader.GetString(2);
-
-			string passwordQuestion = "";
-			if (reader.GetValue(3) != DBNull.Value)
-				passwordQuestion = reader.GetString(3);
-
-			string comment = "";
-			if (reader.GetValue(4) != DBNull.Value)
-				comment = reader.GetString(4);
-
-			bool isApproved = reader.GetBoolean(5);
-			bool isLockedOut = reader.GetBoolean(6);
-			DateTime creationDate = reader.GetDateTime(7);
-
-			DateTime lastLoginDate = new DateTime();
-			if (reader.GetValue(8) != DBNull.Value)
-				lastLoginDate = reader.GetDateTime(8);
-
-			DateTime lastActivityDate = reader.GetDateTime(9);
-			DateTime lastPasswordChangedDate = reader.GetDateTime(10);
-
-			DateTime lastLockedOutDate = new DateTime();
-			if (reader.GetValue(11) != DBNull.Value)
-				lastLockedOutDate = reader.GetDateTime(11);
-
-			MembershipUser u = new MembershipUser(this.Name,
-												  username,
-												  providerUserKey,
-												  email,
-												  passwordQuestion,
-												  comment,
-												  isApproved,
-												  isLockedOut,
-												  creationDate,
-												  lastLoginDate,
-												  lastActivityDate,
-												  lastPasswordChangedDate,
-												  lastLockedOutDate);
-
-			return u;
-		}
-
-
-		//
-		// MembershipProvider.UnlockUser
-		//
-
-		public override bool UnlockUser(string username)
-		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("UPDATE Users " +
-											  " SET IsLockedOut = False, LastLockedOutDate = ? " +
-											  " WHERE Username = ? AND ApplicationName = ?", conn);
-
-			cmd.Parameters.Add("@LastLockedOutDate", OdbcType.DateTime).Value = DateTime.Now;
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-			int rowsAffected = 0;
-
-			try
-			{
-				conn.Open();
-
-				rowsAffected = cmd.ExecuteNonQuery();
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "UnlockUser");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				conn.Close();
-			}
-
-			if (rowsAffected > 0)
-				return true;
-
-			return false;
-		}
-
-
-		//
-		// MembershipProvider.GetUserNameByEmail
-		//
-
-		public override string GetUserNameByEmail(string email)
-		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT Username" +
-				  " FROM Users WHERE Email = ? AND ApplicationName = ?", conn);
-
-			cmd.Parameters.Add("@Email", OdbcType.VarChar, 128).Value = email;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-			string username = "";
-
-			try
-			{
-				conn.Open();
-
-				username = (string)cmd.ExecuteScalar();
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "GetUserNameByEmail");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				conn.Close();
-			}
-
-			if (username == null)
-				username = "";
-
-			return username;
-		}
-
-
 		//
 		// MembershipProvider.ResetPassword
 		//
-
+		//TODO: Reset Password
 		public override string ResetPassword(string username, string answer)
 		{
 			if (!EnablePasswordReset)
@@ -1059,13 +630,10 @@ namespace Herrd.Extensions.Providers.Members
 
 			if (answer == null && RequiresQuestionAndAnswer)
 			{
-				UpdateFailureCount(username, "passwordAnswer");
-
 				throw new ProviderException("Password answer required for password reset.");
 			}
 
-			string newPassword =
-			  System.Web.Security.Membership.GeneratePassword(newPasswordLength, MinRequiredNonAlphanumericCharacters);
+			string newPassword = Membership.GeneratePassword(NewPasswordLength, MinRequiredNonAlphanumericCharacters);
 
 
 			ValidatePasswordEventArgs args =
@@ -1080,12 +648,12 @@ namespace Herrd.Extensions.Providers.Members
 					throw new MembershipPasswordException("Reset password canceled due to password validation failure.");
 
 
-			OdbcConnection conn = new OdbcConnection(connectionString);
+			OdbcConnection conn = new OdbcConnection(_connectionString);
 			OdbcCommand cmd = new OdbcCommand("SELECT PasswordAnswer, IsLockedOut FROM Users " +
 				  " WHERE Username = ? AND ApplicationName = ?", conn);
 
 			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = _pApplicationName;
 
 			int rowsAffected = 0;
 			string passwordAnswer = "";
@@ -1113,7 +681,7 @@ namespace Herrd.Extensions.Providers.Members
 
 				if (RequiresQuestionAndAnswer && !CheckPassword(answer, passwordAnswer))
 				{
-					UpdateFailureCount(username, "passwordAnswer");
+					
 
 					throw new MembershipPasswordException("Incorrect password answer.");
 				}
@@ -1125,7 +693,7 @@ namespace Herrd.Extensions.Providers.Members
 				updateCmd.Parameters.Add("@Password", OdbcType.VarChar, 255).Value = EncodePassword(newPassword);
 				updateCmd.Parameters.Add("@LastPasswordChangedDate", OdbcType.DateTime).Value = DateTime.Now;
 				updateCmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-				updateCmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+				updateCmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = _pApplicationName;
 
 				rowsAffected = updateCmd.ExecuteNonQuery();
 			}
@@ -1135,7 +703,7 @@ namespace Herrd.Extensions.Providers.Members
 				{
 					WriteToEventLog(e, "ResetPassword");
 
-					throw new ProviderException(exceptionMessage);
+					throw new ProviderException(ExceptionMessage);
 				}
 				else
 				{
@@ -1158,280 +726,50 @@ namespace Herrd.Extensions.Providers.Members
 			}
 		}
 
-
 		//
-		// MembershipProvider.UpdateUser
+		// GetUserFromReader
+		//    A helper function that takes the current row from the OdbcDataReader
+		// and hydrates a MembershiUser from the values. Called by the 
+		// MembershipUser.GetUser implementation.
 		//
 
-		public override void UpdateUser(MembershipUser user)
+		private MembershipUser GetUserFromHerrdUser(User user)
 		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("UPDATE Users " +
-					" SET Email = ?, Comment = ?," +
-					" IsApproved = ?" +
-					" WHERE Username = ? AND ApplicationName = ?", conn);
+			object providerUserKey = user.id;
+			string username = user.user_name;
+			string email = user.email;
 
-			cmd.Parameters.Add("@Email", OdbcType.VarChar, 128).Value = user.Email;
-			cmd.Parameters.Add("@Comment", OdbcType.VarChar, 255).Value = user.Comment;
-			cmd.Parameters.Add("@IsApproved", OdbcType.Bit).Value = user.IsApproved;
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = user.UserName;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
+			//not implemented stuff
+			const string passwordQuestion = "";
+			string comment = string.Empty;
 
+			bool isApproved = user.isApproved;
+			const bool isLockedOut = false;
+			DateTime creationDate = user.creationDate ?? DateTime.Now;
 
-			try
-			{
-				conn.Open();
+			DateTime lastLoginDate =  user.lastLoginDate ?? DateTime.Now;
 
-				cmd.ExecuteNonQuery();
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "UpdateUser");
+			DateTime lastActivityDate = user.lastActivityDate ?? DateTime.Now;
+			DateTime lastPasswordChangedDate = DateTime.Now;
 
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				conn.Close();
-			}
+			DateTime lastLockedOutDate = DateTime.Now;
+
+			var u = new MembershipUser(Name,
+										username,
+										providerUserKey,
+										email,
+										passwordQuestion,
+										comment,
+										isApproved,
+										isLockedOut,
+										creationDate,
+										lastLoginDate,
+										lastActivityDate,
+										lastPasswordChangedDate,
+										lastLockedOutDate);
+
+			return u;
 		}
-
-
-		//
-		// MembershipProvider.ValidateUser
-		//
-
-		public override bool ValidateUser(string username, string password)
-		{
-			bool isValid = false;
-
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT Password, IsApproved FROM Users " +
-					" WHERE Username = ? AND ApplicationName = ? AND IsLockedOut = False", conn);
-
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-			OdbcDataReader reader = null;
-			bool isApproved = false;
-			string pwd = "";
-
-			try
-			{
-				conn.Open();
-
-				reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
-
-				if (reader.HasRows)
-				{
-					reader.Read();
-					pwd = reader.GetString(0);
-					isApproved = reader.GetBoolean(1);
-				}
-				else
-				{
-					return false;
-				}
-
-				reader.Close();
-
-				if (CheckPassword(password, pwd))
-				{
-					if (isApproved)
-					{
-						isValid = true;
-
-						OdbcCommand updateCmd = new OdbcCommand("UPDATE Users SET LastLoginDate = ?" +
-																" WHERE Username = ? AND ApplicationName = ?", conn);
-
-						updateCmd.Parameters.Add("@LastLoginDate", OdbcType.DateTime).Value = DateTime.Now;
-						updateCmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-						updateCmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-						updateCmd.ExecuteNonQuery();
-					}
-				}
-				else
-				{
-					conn.Close();
-
-					UpdateFailureCount(username, "password");
-				}
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "ValidateUser");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-				conn.Close();
-			}
-
-			return isValid;
-		}
-
-
-		//
-		// UpdateFailureCount
-		//   A helper method that performs the checks and updates associated with
-		// password failure tracking.
-		//
-
-		private void UpdateFailureCount(string username, string failureType)
-		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT FailedPasswordAttemptCount, " +
-											  "  FailedPasswordAttemptWindowStart, " +
-											  "  FailedPasswordAnswerAttemptCount, " +
-											  "  FailedPasswordAnswerAttemptWindowStart " +
-											  "  FROM Users " +
-											  "  WHERE Username = ? AND ApplicationName = ?", conn);
-
-			cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-			OdbcDataReader reader = null;
-			DateTime windowStart = new DateTime();
-			int failureCount = 0;
-
-			try
-			{
-				conn.Open();
-
-				reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
-
-				if (reader.HasRows)
-				{
-					reader.Read();
-
-					if (failureType == "password")
-					{
-						failureCount = reader.GetInt32(0);
-						windowStart = reader.GetDateTime(1);
-					}
-
-					if (failureType == "passwordAnswer")
-					{
-						failureCount = reader.GetInt32(2);
-						windowStart = reader.GetDateTime(3);
-					}
-				}
-
-				reader.Close();
-
-				DateTime windowEnd = windowStart.AddMinutes(PasswordAttemptWindow);
-
-				if (failureCount == 0 || DateTime.Now > windowEnd)
-				{
-					// First password failure or outside of PasswordAttemptWindow. 
-					// Start a new password failure count from 1 and a new window starting now.
-
-					if (failureType == "password")
-						cmd.CommandText = "UPDATE Users " +
-										  "  SET FailedPasswordAttemptCount = ?, " +
-										  "      FailedPasswordAttemptWindowStart = ? " +
-										  "  WHERE Username = ? AND ApplicationName = ?";
-
-					if (failureType == "passwordAnswer")
-						cmd.CommandText = "UPDATE Users " +
-										  "  SET FailedPasswordAnswerAttemptCount = ?, " +
-										  "      FailedPasswordAnswerAttemptWindowStart = ? " +
-										  "  WHERE Username = ? AND ApplicationName = ?";
-
-					cmd.Parameters.Clear();
-
-					cmd.Parameters.Add("@Count", OdbcType.Int).Value = 1;
-					cmd.Parameters.Add("@WindowStart", OdbcType.DateTime).Value = DateTime.Now;
-					cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-					cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-					if (cmd.ExecuteNonQuery() < 0)
-						throw new ProviderException("Unable to update failure count and window start.");
-				}
-				else
-				{
-					if (failureCount++ >= MaxInvalidPasswordAttempts)
-					{
-						// Password attempts have exceeded the failure threshold. Lock out
-						// the user.
-
-						cmd.CommandText = "UPDATE Users " +
-										  "  SET IsLockedOut = ?, LastLockedOutDate = ? " +
-										  "  WHERE Username = ? AND ApplicationName = ?";
-
-						cmd.Parameters.Clear();
-
-						cmd.Parameters.Add("@IsLockedOut", OdbcType.Bit).Value = true;
-						cmd.Parameters.Add("@LastLockedOutDate", OdbcType.DateTime).Value = DateTime.Now;
-						cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-						cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-						if (cmd.ExecuteNonQuery() < 0)
-							throw new ProviderException("Unable to lock out user.");
-					}
-					else
-					{
-						// Password attempts have not exceeded the failure threshold. Update
-						// the failure counts. Leave the window the same.
-
-						if (failureType == "password")
-							cmd.CommandText = "UPDATE Users " +
-											  "  SET FailedPasswordAttemptCount = ?" +
-											  "  WHERE Username = ? AND ApplicationName = ?";
-
-						if (failureType == "passwordAnswer")
-							cmd.CommandText = "UPDATE Users " +
-											  "  SET FailedPasswordAnswerAttemptCount = ?" +
-											  "  WHERE Username = ? AND ApplicationName = ?";
-
-						cmd.Parameters.Clear();
-
-						cmd.Parameters.Add("@Count", OdbcType.Int).Value = failureCount;
-						cmd.Parameters.Add("@Username", OdbcType.VarChar, 255).Value = username;
-						cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-						if (cmd.ExecuteNonQuery() < 0)
-							throw new ProviderException("Unable to update failure count.");
-					}
-				}
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "UpdateFailureCount");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-				conn.Close();
-			}
-		}
-
 
 		//
 		// CheckPassword
@@ -1483,7 +821,7 @@ namespace Herrd.Extensions.Providers.Members
 					break;
 				case MembershipPasswordFormat.Hashed:
 					HMACSHA1 hash = new HMACSHA1();
-					hash.Key = HexToByte(machineKey.ValidationKey);
+					hash.Key = HexToByte(_machineKey.ValidationKey);
 					encodedPassword =
 					  Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
 					break;
@@ -1535,154 +873,6 @@ namespace Herrd.Extensions.Providers.Members
 			return returnBytes;
 		}
 
-
-		//
-		// MembershipProvider.FindUsersByName
-		//
-
-		public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
-		{
-
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT Count(*) FROM Users " +
-					  "WHERE Username LIKE ? AND ApplicationName = ?", conn);
-			cmd.Parameters.Add("@UsernameSearch", OdbcType.VarChar, 255).Value = usernameToMatch;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = pApplicationName;
-
-			MembershipUserCollection users = new MembershipUserCollection();
-
-			OdbcDataReader reader = null;
-
-			try
-			{
-				conn.Open();
-				totalRecords = (int)cmd.ExecuteScalar();
-
-				if (totalRecords <= 0) { return users; }
-
-				cmd.CommandText = "SELECT PKID, Username, Email, PasswordQuestion," +
-				  " Comment, IsApproved, IsLockedOut, CreationDate, LastLoginDate," +
-				  " LastActivityDate, LastPasswordChangedDate, LastLockedOutDate " +
-				  " FROM Users " +
-				  " WHERE Username LIKE ? AND ApplicationName = ? " +
-				  " ORDER BY Username Asc";
-
-				reader = cmd.ExecuteReader();
-
-				int counter = 0;
-				int startIndex = pageSize * pageIndex;
-				int endIndex = startIndex + pageSize - 1;
-
-				while (reader.Read())
-				{
-					if (counter >= startIndex)
-					{
-						MembershipUser u = GetUserFromReader(reader);
-						users.Add(u);
-					}
-
-					if (counter >= endIndex) { cmd.Cancel(); }
-
-					counter++;
-				}
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "FindUsersByName");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-
-				conn.Close();
-			}
-
-			return users;
-		}
-
-		//
-		// MembershipProvider.FindUsersByEmail
-		//
-
-		public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
-		{
-			OdbcConnection conn = new OdbcConnection(connectionString);
-			OdbcCommand cmd = new OdbcCommand("SELECT Count(*) FROM Users " +
-											  "WHERE Email LIKE ? AND ApplicationName = ?", conn);
-			cmd.Parameters.Add("@EmailSearch", OdbcType.VarChar, 255).Value = emailToMatch;
-			cmd.Parameters.Add("@ApplicationName", OdbcType.VarChar, 255).Value = ApplicationName;
-
-			MembershipUserCollection users = new MembershipUserCollection();
-
-			OdbcDataReader reader = null;
-			totalRecords = 0;
-
-			try
-			{
-				conn.Open();
-				totalRecords = (int)cmd.ExecuteScalar();
-
-				if (totalRecords <= 0) { return users; }
-
-				cmd.CommandText = "SELECT PKID, Username, Email, PasswordQuestion," +
-						 " Comment, IsApproved, IsLockedOut, CreationDate, LastLoginDate," +
-						 " LastActivityDate, LastPasswordChangedDate, LastLockedOutDate " +
-						 " FROM Users " +
-						 " WHERE Email LIKE ? AND ApplicationName = ? " +
-						 " ORDER BY Username Asc";
-
-				reader = cmd.ExecuteReader();
-
-				int counter = 0;
-				int startIndex = pageSize * pageIndex;
-				int endIndex = startIndex + pageSize - 1;
-
-				while (reader.Read())
-				{
-					if (counter >= startIndex)
-					{
-						MembershipUser u = GetUserFromReader(reader);
-						users.Add(u);
-					}
-
-					if (counter >= endIndex) { cmd.Cancel(); }
-
-					counter++;
-				}
-			}
-			catch (OdbcException e)
-			{
-				if (WriteExceptionsToEventLog)
-				{
-					WriteToEventLog(e, "FindUsersByEmail");
-
-					throw new ProviderException(exceptionMessage);
-				}
-				else
-				{
-					throw e;
-				}
-			}
-			finally
-			{
-				if (reader != null) { reader.Close(); }
-
-				conn.Close();
-			}
-
-			return users;
-		}
-
-
 		//
 		// WriteToEventLog
 		//   A helper function that writes exception detail to the event log. Exceptions
@@ -1695,14 +885,85 @@ namespace Herrd.Extensions.Providers.Members
 		private void WriteToEventLog(Exception e, string action)
 		{
 			EventLog log = new EventLog();
-			log.Source = eventSource;
-			log.Log = eventLog;
+			log.Source = EventSource;
+			log.Log = EventLog;
 
 			string message = "An exception occurred communicating with the data source.\n\n";
 			message += "Action: " + action + "\n\n";
 			message += "Exception: " + e.ToString();
 
 			log.WriteEntry(message);
+		}
+
+
+		//Not implemented
+
+		public override bool ValidateUser(string username, string password)
+		{
+			//this will actually validate again the email not the username as we login with email
+			User user = _dbDataContext.Users.FirstOrDefault(x => x.email == username);
+
+			bool isValid = false;
+
+			if (user == null) return false;
+
+			if (CheckPassword(password, user.password))
+			{
+				if (user.isApproved)
+				{
+					isValid = true;
+					user.lastLoginDate = DateTime.Now;
+					try
+					{
+						_dbDataContext.SubmitChanges();
+					}
+					catch (Exception e)
+					{
+						//TODO: sort out logging
+					}
+				}
+			}
+
+			return isValid;
+
+		}
+
+		public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUser GetUser(string username, bool userIsOnline)
+		{
+			//using email instead of username :|
+			User user = _dbDataContext.Users.FirstOrDefault(u => u.email == username);
+			return user == null ? null : GetUserFromHerrdUser(user);
+		}
+
+		public override string GetUserNameByEmail(string email)
+		{
+			User user = _dbDataContext.Users.FirstOrDefault(u => u.email == email);
+			return user == null ? String.Empty : user.user_name;
+		}
+
+		public override bool UnlockUser(string userName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void UpdateUser(MembershipUser user)
+		{
+			throw new NotImplementedException();
 		}
 
 	}

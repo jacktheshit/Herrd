@@ -11,10 +11,17 @@
 	@Html.Partial("~/Views/Partials/FormAddTrack.cshtml", new Track())
 
 	<div class="item_container">
-
-		@foreach (var track in Model)
+		
+		@if(Model.Any())
 		{
-			@Html.Partial("~/Views/Partials/TrackItemNormal.cshtml", track)
+			foreach (var track in Model)
+			{
+				@Html.Partial("~/Views/Partials/TrackItemNormal.cshtml", track)
+			}
+		}
+		else
+		{
+			<p>You havent added any tracks yet. Do so.</p>
 		}
 	
 	</div>

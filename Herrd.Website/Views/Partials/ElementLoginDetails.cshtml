@@ -1,0 +1,41 @@
+﻿@using System.Web.Security
+@using Herrd.Extensions;
+
+@if(HttpContext.Current.User.Identity.IsAuthenticated)
+{
+	var user = Membership.GetUser();
+	if(user != null)
+	{
+		<div class="profile float_right">
+			<a href="#" class="avatar block">
+				@RenderAvatar(user.Email, user.UserName)
+			</a>
+			<div class="account">
+				<span class="arrow">
+					<!--arrow-->
+				</span>
+				<ul class="nav_account">
+					<li>
+						@Html.ActionLink("Edit profile", "EditProfile", "Account")
+					</li>
+					<li>
+						@Html.ActionLink("Log out", "Logout", "Account")
+					</li>
+				</ul>
+			</div>
+		</div>
+	}
+	else
+	{
+		@Html.ActionLink("Log out", "Logout", "Account")
+	}
+}
+
+@helper RenderAvatar (string email, string username) 
+{
+	string hashedEmail = Helpers.HashGravatarEmail(email);
+	string defaultAvatarImg = Server.UrlEncode("http://listen.adamduncandesigns.com/images/avatar.jpg");
+	const int avatarSize = 30;
+	<img src="http://www.gravatar.com/avatar/@hashedEmail?s=@avatarSize" alt="@username, @email" width="30" height="30"/>
+	<span><!--cog--></span>
+}

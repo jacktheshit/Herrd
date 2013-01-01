@@ -18,43 +18,15 @@
 		<div class="header">
 			<div class="inner">
 				<p class="h2 reverse float_left">
-					<a href="index.php">
-						<img src="images/logo.png" alt="Herd BETA logo" />
+					<a href="/">
+						<img src="/images/logo.png" alt="Herd BETA logo" />
 					</a>
 				</p>
-				<div class="profile float_right">
-					<a href="#" class="avatar block">
-						<img src="images/avatar.jpg" width="30" height="30" />
-					</a>
-					<div class="account">
-						<span class="arrow">
-							<!--arrow-->
-						</span>
-						<ul class="nav_account">
-							<li>
-								<a href="#">Edit profile</a>
-							</li>
-							<li>
-								<a href="login.php">Log out</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<ul class="nav float_right">
-					<li>
-						<a href="/" class="current">Playlist</a>
-					</li>
-					<li>
-						@Html.ActionLink("Archive", "Index", "Archive")
-					</li>
-					<li>
-						<a href="#">Feed</a>
-					</li>
-				</ul>
-				<div class="search_field float_right">
-					<a href="#" class="search_link float_right">Search</a>
-					<input type="text" value="" placeholder="Search" id="search_filter" class="search_input input_title" autocomplete="off" />
-				</div>
+				
+				@Html.Partial("~/Views/Partials/ElementLoginDetails.cshtml")
+
+				@Html.Partial("~/Views/Partials/NavigationMain.cshtml")
+
 			</div>
 		</div>
 

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Herrd.DataLayer;
 
 namespace Herrd.Website.Controllers
@@ -13,17 +14,38 @@ namespace Herrd.Website.Controllers
 	{
 
 		private readonly HerrdDBDataContext _db = new HerrdDBDataContext();
+		private readonly MembershipUser _currentUser;
+		private readonly User _dbUser;
+
+		public HomeController()
+		{
+			_currentUser = Membership.GetUser();
+			if (_currentUser != null) _dbUser = _db.Users.FirstOrDefault(x => x.email == _currentUser.Email);
+		}
 
 		public ActionResult Index()
 		{
-			var tracks = _db.Tracks.Include(t => t.User);
-			return View(tracks.Where(x => !x.archive).OrderByDescending(x => x.date).ToList());
+			//no user then send to alt homepage
+			if (_currentUser == null) return RedirectToAction("NormalHomepage");
+
+			//otherwise show filtered list of tracks
+			if (_dbUser != null)
+			{
+				var tracks = _dbUser.Tracks;
+				return View(tracks.Where(x => !x.archive).OrderByDescending(x => x.date).ToList());
+			}
+			return RedirectToAction("NormalHomepage");
+		}
+
+		public ActionResult NormalHomepage ()
+		{
+			return View();
 		}
 
 		public bool AddToArchive(int id = 0)
 		{
 			if (id == 0) return false;
-			Track track = _db.Tracks.FirstOrDefault(x => x.id == id);
+			Track track = _dbUser.Tracks.FirstOrDefault(x => x.id == id);
 
 			if (track == null) return false;
 			track.archive = true;
@@ -34,7 +56,7 @@ namespace Herrd.Website.Controllers
 		public bool RestoreFromArchive (int id = 0)
 		{
 			if (id == 0) return false;
-			Track track = _db.Tracks.FirstOrDefault(x => x.id == id);
+			Track track = _dbUser.Tracks.FirstOrDefault(x => x.id == id);
 
 			if (track == null) return false;
 			track.archive = false;
@@ -45,16 +67,14 @@ namespace Herrd.Website.Controllers
 		[HttpPost]
 		public ActionResult AddTrack (Track track)
 		{
-			//get user
-			User user = _db.Users.FirstOrDefault(x => x.id == 3);
-
 			//update track object to have defaults
 			track.archive = false;
 			track.playlist = false;
 			track.date = DateTime.Now;
 
 			//add track to user
-			user.Tracks.Add(track);
+			if (_dbUser == null) return HttpNotFound();
+			_dbUser.Tracks.Add(track);
 
 			//save
 			try

@@ -1,0 +1,25 @@
+﻿@using Herrd.Extensions.Models
+@{
+    ViewBag.Title = "SignUp";
+    Layout = "~/Views/_layout.cshtml";
+}
+
+<div class="site_container">
+	<h1 class="no_display">Herd.</h1>
+	<p class="h1">A to-do list for music and videos.</p>
+	<div class="spacer">
+		<!--spacer-->
+	</div>
+
+	<h2>Log in</h2>
+	@Html.Partial("~/Views/Partials/FormLogin.cshtml", new LoginModel())
+
+	<p class="or align_center">OR</p>
+
+	<h2>Sign up</h2>
+	@Html.Partial("~/Views/Partials/FormRegister.cshtml", new RegisterModel())
+
+	<div class="push">
+		<!--push-->
+	</div>
+</div>

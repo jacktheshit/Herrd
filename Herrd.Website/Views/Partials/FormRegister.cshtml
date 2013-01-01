@@ -1,0 +1,24 @@
+﻿@model Herrd.Extensions.Models.RegisterModel
+
+@using (Html.BeginForm("SignUp", "Account", FormMethod.Post, new { @class = "form_std no_border no_padding_bottom" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary()
+
+	@Html.LabelFor(x => x.UserName)
+	@Html.TextBoxFor(x => x.UserName, new { @placeholder = "Username"})
+
+	@Html.LabelFor(x => x.Email)
+	@Html.TextBoxFor(x => x.Email, new { @placeholder = "Email Address"})
+
+	@Html.LabelFor(x => x.Password)
+	@Html.PasswordFor(x => x.Password, new { @placeholder = "Password"})
+
+	@Html.LabelFor(x => x.ConfirmPassword)
+	@Html.PasswordFor(x => x.ConfirmPassword, new { @placeholder = "Confirm Password"})
+
+	<div class="clearer">
+		<!--clear-->
+	</div>
+	<input class="submit_std" type="submit" value="Sign up" />
+}

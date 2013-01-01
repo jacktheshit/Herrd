@@ -1,0 +1,29 @@
+﻿
+<ul class="nav float_right">
+	@if (HttpContext.Current.User.Identity.IsAuthenticated)
+	{
+		<li>
+			<a href="/" class="current">Playlist</a>
+		</li>
+		<li>
+			@Html.ActionLink("Archive", "Index", "Archive")
+		</li>
+		@*<li>
+			<a href="#">Feed</a>
+		</li>*@
+	}
+	else
+	{
+		<li>
+			@Html.ActionLink("Login / Signup", "SignUp", "Account")
+		</li>
+	}
+</ul>
+
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+	<div class="search_field float_right">
+		<a href="#" class="search_link float_right">Search</a>
+		<input type="text" value="" placeholder="Search" id="search_filter" class="search_input input_title" autocomplete="off" />
+	</div>
+}

@@ -1,0 +1,20 @@
+﻿@model Herrd.Extensions.Models.LoginModel
+
+@using(Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "form_signin"}))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+	
+	@Html.LabelFor(x => x.Email)
+	@Html.TextBoxFor(x => x.Email, new { @placeholder = "Email address" })
+
+	@Html.LabelFor(x => x.Password)
+	@Html.PasswordFor(x => x.Password, new { @placeholder = "Password" })
+	
+	<input id="submit_signin" type="submit" value="Log In" />
+	
+	<div class="remember">
+		@Html.CheckBoxFor(x => x.RememberMe, new { @id = "RememberMe" })
+		@Html.LabelFor(x => x.RememberMe)
+	</div>
+}
