@@ -88,9 +88,44 @@ namespace Herrd.Website.Controllers
 			}
 		}
 
-		public ActionResult DeleteRecord(int id = 0)
+		[HttpPost]
+		public ActionResult EditTrack (Track track)
 		{
-			return HttpNotFound();
+			Track dbTrack = _dbUser.Tracks.FirstOrDefault(x => x.id == track.id);
+			if (dbTrack == null) return HttpNotFound();
+
+			dbTrack.term = track.term;
+			dbTrack.title = track.title;
+			try
+			{
+				_db.SubmitChanges();
+			}
+			catch(Exception e)
+			{
+				return HttpNotFound();
+			}
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public ActionResult DeleteTrack(int id = 0)
+		{
+			Track dbTrack = _dbUser.Tracks.FirstOrDefault(x => x.id == id);
+			if (dbTrack == null) return HttpNotFound();
+
+			//delete
+			_db.Tracks.DeleteOnSubmit(dbTrack);
+
+			try
+			{
+				_db.SubmitChanges();
+			}
+			catch (Exception e)
+			{
+				return HttpNotFound();
+			}
+
+			return RedirectToAction("Index");
 		}
 
 	}

@@ -116,7 +116,7 @@ var Listing = {
 			var $this = $(this),
 				$item = $this.parents('.item'),
 				$itemId = $item.attr('id').split('item-')[1],
-				url = 'includes/functions/delete.php';
+				url = $this.attr('href');
 
 			var confirmed = confirm("Are you sure you want to delete this item?");
 

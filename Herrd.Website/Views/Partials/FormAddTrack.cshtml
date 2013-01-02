@@ -4,6 +4,8 @@
 <div class="form_container">
 	@using (Html.BeginForm("AddTrack", "Home", FormMethod.Post, new { @id = "form_add"})){
 	
+		@Html.AntiForgeryToken()
+
 		@Html.LabelFor(t => t.term)
 		@Html.TextAreaFor(t => t.term, new { @placeholder = "Add..."})
 
