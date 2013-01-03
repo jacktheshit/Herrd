@@ -282,6 +282,10 @@ p
 	font-size: 0.875em;
 	line-height: 1.429;
 }
+.hm
+{
+	margin-bottom: 10px;
+}
 
 	p.button_height
 	{
@@ -385,6 +389,11 @@ ul, ol
 		text-transform: uppercase;
 		letter-spacing: 1px;
 	}
+.blocks li
+{
+	display: block;
+	margin: 0 0 5px;
+}
 
 		.controls li a
 		{
@@ -441,8 +450,12 @@ ul, ol
 }
 .media .bd {
 	overflow: hidden;
-	padding-left:15px;
+	padding-left:20px;
 	zoom: 1;
+}
+.item .media .bd
+{
+	padding-left: 15px;
 }
 
 .artwork
@@ -624,7 +637,7 @@ form input[type=submit], form input.submit_edit
 	}
 
 /* Log in */
-#form_signin, #form_signup
+#form_signin
 {
 	padding: 10px 0 40px;
 	overflow: hidden;
@@ -633,8 +646,8 @@ form input[type=submit], form input.submit_edit
 
 	#form_signin input
 	{
-		max-width: 191px;
-		width: 191px;
+		max-width: 206px;
+		width: 206px;
 		float: left;
 		margin-right: 10px;
 	}
@@ -680,28 +693,48 @@ form input[type=submit], form input.submit_edit
 }
 
 /* Sign up */
-#form_signup label
+.form_std label
 {
 	display: block;
-	float: left;
-	width: 115px;
-	margin: 0 20px 10px 0;
-	line-height: 30px;
-	text-align: right;
+	width: 100%;
+	margin: 0 0 10px 0;
 }
 
-#form_signup input
+.form_std input
 {
-	width: 367px;
-	float: left;
+	width: 360px;
+	margin-bottom: 20px;
 }
-
-#form_signup #submit_signup
+.form_std select
 {
+	padding: 4px 4px 4px 2px;
+	border: 1px solid #ccc;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-size: 0.875em;
+	line-height: 1.429;
+	margin-bottom: 20px;
+	width: 370px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+.form_std .submit_std
+{
+	margin-top: 20px;
 	width: 90px;
-	margin-left: 135px;
 }
 
+.form_std input[type="radio"]
+{
+	float: left;
+	width: 15px;
+	padding: 0;
+	margin:0 10px 10px 0;
+	border: 0;
+}
+.form_std .radio
+{
+	font-size: 0.875em;
+}
 
 /*-------------> blockquotes */
 
@@ -764,9 +797,26 @@ form input[type=submit], form input.submit_edit
 	border-radius:2px;
 	border:1px solid #333;
 	height: 30px;
+	position: relative;
 	width: 30px;
 	overflow: hidden;
 }
+	.avatar span
+	{
+		background: url(../images/avatar-settings.png) no-repeat center center;
+		display: none;
+		height: 30px;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 30px;
+	}
+	.avatar:hover span,
+	.avatar:focus span,
+	.avatar.selected span
+	{
+		display: block;
+	}
 .account
 {
 	background-color: #333;
@@ -829,6 +879,22 @@ form input[type=submit], form input.submit_edit
 	}
 
 /*--------------------------------------------------=> UTILITY */
+.hr
+{
+	display:block;
+	width:100%;
+	height:1px;
+	margin-bottom:20px;
+	font-size:0;
+	line-height:0;
+	border-bottom:1px solid #bbb;
+}
+.rounded
+{
+	-webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+	
 /*-------------> margin */
 .no_margin
 {
@@ -966,7 +1032,11 @@ form input[type=submit], form input.submit_edit
 	overflow: hidden;
 	padding: 0;
 }
-
+.half
+{
+	height: 15px;
+	line-height: 15px;
+}
 /*-------------> text */
 .uppercase
 {
@@ -996,7 +1066,7 @@ form input[type=submit], form input.submit_edit
 /*-------------> misc */
 .block
 {
-	display: block;
+	display: block !important;
 }
 
 .debug

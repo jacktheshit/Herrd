@@ -317,6 +317,7 @@ var Account = {
 		$(Account.avatar).on('click', function (e) {
 			var $this = $(this);
 			$this.parents(Account.container).find(Account.menu).toggle().toggleClass('open');
+			$this.toggleClass('selected');
 			e.stopPropagation();
 			e.preventDefault();
 		});
