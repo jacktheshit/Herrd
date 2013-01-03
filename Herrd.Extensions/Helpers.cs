@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Security;
+using Herrd.DataLayer;
 
 namespace Herrd.Extensions
 {
@@ -35,6 +37,13 @@ namespace Herrd.Extensions
 			}
 
 			return sBuilder.ToString();  // Return the hexadecimal string. 
+		}
+
+		public static string GetAvatar(string email)
+		{
+			HerrdDBDataContext dbDataContext = new HerrdDBDataContext();
+			User user = dbDataContext.Users.FirstOrDefault(x => x.email == email);
+			return user == null ? "" : user.avatar;
 		}
 
 	}

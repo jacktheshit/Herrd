@@ -434,6 +434,16 @@ namespace Herrd.DataLayer
 		
 		private string _userRole;
 		
+		private string _websiteUrl;
+		
+		private string _city;
+		
+		private string _country;
+		
+		private bool _isPrivate;
+		
+		private string _avatar;
+		
 		private EntitySet<Track> _Tracks;
 		
     #region Extensibility Method Definitions
@@ -464,6 +474,16 @@ namespace Herrd.DataLayer
     partial void OnisOnlineChanged();
     partial void OnuserRoleChanging(string value);
     partial void OnuserRoleChanged();
+    partial void OnwebsiteUrlChanging(string value);
+    partial void OnwebsiteUrlChanged();
+    partial void OncityChanging(string value);
+    partial void OncityChanged();
+    partial void OncountryChanging(string value);
+    partial void OncountryChanged();
+    partial void OnisPrivateChanging(bool value);
+    partial void OnisPrivateChanged();
+    partial void OnavatarChanging(string value);
+    partial void OnavatarChanged();
     #endregion
 		
 		public User()
@@ -708,6 +728,106 @@ namespace Herrd.DataLayer
 					this._userRole = value;
 					this.SendPropertyChanged("userRole");
 					this.OnuserRoleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_websiteUrl", DbType="NVarChar(150)")]
+		public string websiteUrl
+		{
+			get
+			{
+				return this._websiteUrl;
+			}
+			set
+			{
+				if ((this._websiteUrl != value))
+				{
+					this.OnwebsiteUrlChanging(value);
+					this.SendPropertyChanging();
+					this._websiteUrl = value;
+					this.SendPropertyChanged("websiteUrl");
+					this.OnwebsiteUrlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_city", DbType="NVarChar(50)")]
+		public string city
+		{
+			get
+			{
+				return this._city;
+			}
+			set
+			{
+				if ((this._city != value))
+				{
+					this.OncityChanging(value);
+					this.SendPropertyChanging();
+					this._city = value;
+					this.SendPropertyChanged("city");
+					this.OncityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_country", DbType="NVarChar(50)")]
+		public string country
+		{
+			get
+			{
+				return this._country;
+			}
+			set
+			{
+				if ((this._country != value))
+				{
+					this.OncountryChanging(value);
+					this.SendPropertyChanging();
+					this._country = value;
+					this.SendPropertyChanged("country");
+					this.OncountryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isPrivate", DbType="Bit NOT NULL")]
+		public bool isPrivate
+		{
+			get
+			{
+				return this._isPrivate;
+			}
+			set
+			{
+				if ((this._isPrivate != value))
+				{
+					this.OnisPrivateChanging(value);
+					this.SendPropertyChanging();
+					this._isPrivate = value;
+					this.SendPropertyChanged("isPrivate");
+					this.OnisPrivateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_avatar", DbType="NVarChar(250)")]
+		public string avatar
+		{
+			get
+			{
+				return this._avatar;
+			}
+			set
+			{
+				if ((this._avatar != value))
+				{
+					this.OnavatarChanging(value);
+					this.SendPropertyChanging();
+					this._avatar = value;
+					this.SendPropertyChanged("avatar");
+					this.OnavatarChanged();
 				}
 			}
 		}

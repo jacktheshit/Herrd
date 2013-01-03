@@ -1,0 +1,174 @@
+﻿<error errorId="a1c6c940-5c55-4dca-a784-9cd5580ffc8a" application="/LM/W3SVC/2/ROOT" host="JACK-MAC-PC" type="System.ArgumentNullException" message="String reference not set to an instance of a String.&#xD;&#xA;Parameter name: s" source="mscorlib" detail="System.ArgumentNullException: String reference not set to an instance of a String.&#xD;&#xA;Parameter name: s&#xD;&#xA;   at System.Text.Encoding.GetBytes(String s)&#xD;&#xA;   at Herrd.Extensions.Helpers.CalculateMd5Hash(String input) in c:\Websites\Herrd\Herrd.Extensions\Helpers.cs:line 24&#xD;&#xA;   at Herrd.Extensions.Helpers.HashGravatarEmail(String email) in c:\Websites\Herrd\Herrd.Extensions\Helpers.cs:line 15&#xD;&#xA;   at ASP.RazorHelpers.&lt;&gt;c__DisplayClass1.&lt;RenderAvatar&gt;b__0(TextWriter __razor_helper_writer) in c:\Websites\Herrd\Herrd.Website\App_Code\RazorHelpers.cshtml:line 6&#xD;&#xA;   at System.Web.WebPages.HelperResult.WriteTo(TextWriter writer)&#xD;&#xA;   at System.Web.WebPages.WebPageBase.Write(HelperResult result)&#xD;&#xA;   at ASP._Page_Views_Partials_ElementLoginDetails_cshtml.Execute() in c:\Websites\Herrd\Herrd.Website\Views\Partials\ElementLoginDetails.cshtml:line 12&#xD;&#xA;   at System.Web.WebPages.WebPageBase.ExecutePageHierarchy()&#xD;&#xA;   at System.Web.Mvc.WebViewPage.ExecutePageHierarchy()&#xD;&#xA;   at System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)&#xD;&#xA;   at System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)&#xD;&#xA;   at System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)&#xD;&#xA;   at System.Web.Mvc.HtmlHelper.RenderPartialInternal(String partialViewName, ViewDataDictionary viewData, Object model, TextWriter writer, ViewEngineCollection viewEngineCollection)&#xD;&#xA;   at System.Web.Mvc.Html.PartialExtensions.Partial(HtmlHelper htmlHelper, String partialViewName, Object model, ViewDataDictionary viewData)&#xD;&#xA;   at System.Web.Mvc.Html.PartialExtensions.Partial(HtmlHelper htmlHelper, String partialViewName)&#xD;&#xA;   at ASP._Page_Views__layout_cshtml.Execute() in c:\Websites\Herrd\Herrd.Website\Views\_layout.cshtml:line 26&#xD;&#xA;   at System.Web.WebPages.WebPageBase.ExecutePageHierarchy()&#xD;&#xA;   at System.Web.Mvc.WebViewPage.ExecutePageHierarchy()&#xD;&#xA;   at System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)&#xD;&#xA;   at System.Web.WebPages.WebPageBase.&lt;&gt;c__DisplayClass7.&lt;RenderPageCore&gt;b__6(TextWriter writer)&#xD;&#xA;   at System.Web.WebPages.HelperResult.WriteTo(TextWriter writer)&#xD;&#xA;   at System.Web.WebPages.WebPageBase.Write(HelperResult result)&#xD;&#xA;   at System.Web.WebPages.WebPageBase.RenderSurrounding(String partialViewName, Action`1 body)&#xD;&#xA;   at System.Web.WebPages.WebPageBase.PopContext()&#xD;&#xA;   at System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)&#xD;&#xA;   at System.Web.Mvc.RazorView.RenderView(ViewContext viewContext, TextWriter writer, Object instance)&#xD;&#xA;   at System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)&#xD;&#xA;   at System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.&lt;&gt;c__DisplayClass1a.&lt;InvokeActionResultWithFilters&gt;b__17()&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.&lt;&gt;c__DisplayClass1a.&lt;&gt;c__DisplayClass1c.&lt;InvokeActionResultWithFilters&gt;b__19()&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncControllerActionInvoker.&lt;&gt;c__DisplayClass25.&lt;&gt;c__DisplayClass2a.&lt;BeginInvokeAction&gt;b__20()&#xD;&#xA;   at System.Web.Mvc.Async.AsyncControllerActionInvoker.&lt;&gt;c__DisplayClass25.&lt;BeginInvokeAction&gt;b__22(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()&#xD;&#xA;   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.Controller.&lt;&gt;c__DisplayClass1d.&lt;BeginExecuteCore&gt;b__18(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.&lt;&gt;c__DisplayClass4.&lt;MakeVoidDelegate&gt;b__3(IAsyncResult ar)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()&#xD;&#xA;   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.&lt;&gt;c__DisplayClass4.&lt;MakeVoidDelegate&gt;b__3(IAsyncResult ar)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()&#xD;&#xA;   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.&lt;&gt;c__DisplayClass8.&lt;BeginProcessRequest&gt;b__3(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.&lt;&gt;c__DisplayClass4.&lt;MakeVoidDelegate&gt;b__3(IAsyncResult ar)&#xD;&#xA;   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()&#xD;&#xA;   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)&#xD;&#xA;   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="jstunell@saslondon.com" time="2013-01-03T22:59:16.3477113Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CACHE_CONTROL:max-age=0&#xD;&#xA;HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;HTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.3&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip,deflate,sdch&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8&#xD;&#xA;HTTP_COOKIE:ASP.NET_SessionId=lwygwwa3clknr0vm35wnp4bn; __RequestVerificationToken=RrMVIc_5OAgeGWQBHap_do_9KShBAX6kE3Gg4qbyDEPpHWhPC-mrpWJUmlAe0V01Y1RSgdZruI6r2rTYq7mWQJBOmnh1m3B4u26Va3NGftB5O-Gv2LNA2jN9fZonNFu9mjNMYw2; .ASPXAUTH=7BF50A73F38F5759AFCA8AEB2522F62FDCF249226CACBE58A2F40DB99A2FAE5F6EE026BAFBBAE0052AD3C7AC7C1EC796039D78CA8CEAAC5808B034DC8E8A01BE0959B9F2AB8DE20A7C14E7DF0D15FA02EB64296F0730862E7CC3F4E4E9BEAB0F759178E4A9A2A46E8918C866B5840B7778BD9D37B8E5304C84B2CBEAF4E3527DD3C11D1FC5E86F2092C01C7C9F4458FBCE86F7AA&#xD;&#xA;HTTP_HOST:localhost:1371&#xD;&#xA;HTTP_REFERER:http://localhost:1371/&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Cache-Control: max-age=0&#xD;&#xA;Connection: keep-alive&#xD;&#xA;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3&#xD;&#xA;Accept-Encoding: gzip,deflate,sdch&#xD;&#xA;Accept-Language: en-US,en;q=0.8&#xD;&#xA;Cookie: ASP.NET_SessionId=lwygwwa3clknr0vm35wnp4bn; __RequestVerificationToken=RrMVIc_5OAgeGWQBHap_do_9KShBAX6kE3Gg4qbyDEPpHWhPC-mrpWJUmlAe0V01Y1RSgdZruI6r2rTYq7mWQJBOmnh1m3B4u26Va3NGftB5O-Gv2LNA2jN9fZonNFu9mjNMYw2; .ASPXAUTH=7BF50A73F38F5759AFCA8AEB2522F62FDCF249226CACBE58A2F40DB99A2FAE5F6EE026BAFBBAE0052AD3C7AC7C1EC796039D78CA8CEAAC5808B034DC8E8A01BE0959B9F2AB8DE20A7C14E7DF0D15FA02EB64296F0730862E7CC3F4E4E9BEAB0F759178E4A9A2A46E8918C866B5840B7778BD9D37B8E5304C84B2CBEAF4E3527DD3C11D1FC5E86F2092C01C7C9F4458FBCE86F7AA&#xD;&#xA;Host: localhost:1371&#xD;&#xA;Referer: http://localhost:1371/&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/2/ROOT" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="C:\Websites\Herrd\Herrd.Website\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="Forms" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="jstunell@saslondon.com" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="*****" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="jstunell@saslondon.com" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="jstunell@saslondon.com" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="0" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="2" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/2" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/Account/EditProfile" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="C:\Websites\Herrd\Herrd.Website\Account\EditProfile" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="4770" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="GET" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/Account/EditProfile" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="1371" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/8.0" />
+    </item>
+    <item name="URL">
+      <value string="/Account/EditProfile" />
+    </item>
+    <item name="HTTP_CACHE_CONTROL">
+      <value string="max-age=0" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" />
+    </item>
+    <item name="HTTP_ACCEPT_CHARSET">
+      <value string="ISO-8859-1,utf-8;q=0.7,*;q=0.3" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip,deflate,sdch" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="en-US,en;q=0.8" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="ASP.NET_SessionId=lwygwwa3clknr0vm35wnp4bn; __RequestVerificationToken=RrMVIc_5OAgeGWQBHap_do_9KShBAX6kE3Gg4qbyDEPpHWhPC-mrpWJUmlAe0V01Y1RSgdZruI6r2rTYq7mWQJBOmnh1m3B4u26Va3NGftB5O-Gv2LNA2jN9fZonNFu9mjNMYw2; .ASPXAUTH=7BF50A73F38F5759AFCA8AEB2522F62FDCF249226CACBE58A2F40DB99A2FAE5F6EE026BAFBBAE0052AD3C7AC7C1EC796039D78CA8CEAAC5808B034DC8E8A01BE0959B9F2AB8DE20A7C14E7DF0D15FA02EB64296F0730862E7CC3F4E4E9BEAB0F759178E4A9A2A46E8918C866B5840B7778BD9D37B8E5304C84B2CBEAF4E3527DD3C11D1FC5E86F2092C01C7C9F4458FBCE86F7AA" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:1371" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost:1371/" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" />
+    </item>
+  </serverVariables>
+  <cookies>
+    <item name="ASP.NET_SessionId">
+      <value string="lwygwwa3clknr0vm35wnp4bn" />
+    </item>
+    <item name="__RequestVerificationToken">
+      <value string="RrMVIc_5OAgeGWQBHap_do_9KShBAX6kE3Gg4qbyDEPpHWhPC-mrpWJUmlAe0V01Y1RSgdZruI6r2rTYq7mWQJBOmnh1m3B4u26Va3NGftB5O-Gv2LNA2jN9fZonNFu9mjNMYw2" />
+    </item>
+    <item name=".ASPXAUTH">
+      <value string="7BF50A73F38F5759AFCA8AEB2522F62FDCF249226CACBE58A2F40DB99A2FAE5F6EE026BAFBBAE0052AD3C7AC7C1EC796039D78CA8CEAAC5808B034DC8E8A01BE0959B9F2AB8DE20A7C14E7DF0D15FA02EB64296F0730862E7CC3F4E4E9BEAB0F759178E4A9A2A46E8918C866B5840B7778BD9D37B8E5304C84B2CBEAF4E3527DD3C11D1FC5E86F2092C01C7C9F4458FBCE86F7AA" />
+    </item>
+  </cookies>
+</error>

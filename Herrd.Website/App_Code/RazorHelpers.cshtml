@@ -1,0 +1,17 @@
+﻿@using Herrd.Extensions
+
+@helper RenderAvatar (string email, string username) 
+{
+	string hashedEmail = Helpers.HashGravatarEmail(email);
+	const int avatarSize = 30;
+
+	string avatarUrl = Helpers.GetAvatar(email);
+	
+	if (String.IsNullOrEmpty(avatarUrl))
+	{
+		avatarUrl = String.Format("http://www.gravatar.com/avatar/{0}?s={1}", hashedEmail, avatarSize);
+	}
+	
+	<img src="@avatarUrl" alt="@username, @email" width="30" height="30"/>
+	<span><!--cog--></span>
+}

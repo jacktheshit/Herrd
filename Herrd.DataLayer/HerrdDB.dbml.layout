@@ -8,16 +8,16 @@
         <elementListCompartment Id="7ac9258d-3dd1-4e95-b92c-7b403b81f768" absoluteBounds="4.64, 2.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="80e8fd74-ab87-4ae7-b059-a7e60584ef49" absoluteBounds="1.625, 1.625, 2, 3.1170068359375">
+    <classShape Id="69f192df-2338-4b74-827b-b6a87ac2c077" absoluteBounds="1.75, 1.625, 2, 4.0785139973958326">
       <DataClassMoniker Name="/HerrdDBDataContext/User" />
       <nestedChildShapes>
-        <elementListCompartment Id="d6f936b3-fbe7-402f-8224-a7157be748b9" absoluteBounds="1.6400000000000001, 2.085, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="fd7e38b4-9d04-4524-8f02-17e182b2c979" absoluteBounds="1.7650000000000001, 2.085, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.625 : 2.99120198567708); (4.625 : 2.99120198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.75 : 2.99120198567708); (4.625 : 2.99120198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/HerrdDBDataContext/User/User_Track" />
       <nodes>
-        <classShapeMoniker Id="80e8fd74-ab87-4ae7-b059-a7e60584ef49" />
+        <classShapeMoniker Id="69f192df-2338-4b74-827b-b6a87ac2c077" />
         <classShapeMoniker Id="ab4e57e9-ab65-40b3-95b1-74c8258c3c3c" />
       </nodes>
     </associationConnector>

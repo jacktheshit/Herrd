@@ -8,7 +8,7 @@
 	{
 		<div class="profile float_right">
 			<a href="#" class="avatar block">
-				@RenderAvatar(user.Email, user.UserName)
+				@RazorHelpers.RenderAvatar(user.Email, user.UserName)
 			</a>
 			<div class="account">
 				<span class="arrow">
@@ -29,13 +29,4 @@
 	{
 		@Html.ActionLink("Log out", "Logout", "Account")
 	}
-}
-
-@helper RenderAvatar (string email, string username) 
-{
-	string hashedEmail = Helpers.HashGravatarEmail(email);
-	string defaultAvatarImg = Server.UrlEncode("http://listen.adamduncandesigns.com/images/avatar.jpg");
-	const int avatarSize = 30;
-	<img src="http://www.gravatar.com/avatar/@hashedEmail?s=@avatarSize" alt="@username, @email" width="30" height="30"/>
-	<span><!--cog--></span>
 }
