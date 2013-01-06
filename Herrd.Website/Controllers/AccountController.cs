@@ -23,6 +23,7 @@ namespace Herrd.Website.Controllers
 		{
 			_currentUser = Membership.GetUser();
 			if (_currentUser != null) _dbUser = _db.Users.FirstOrDefault(x => x.email == _currentUser.Email);
+			if (_dbUser != null) _countryList = Helpers.CountryList.ToSelectListItems(_dbUser.country);
 		}
 
 		public ActionResult Index()
@@ -100,6 +101,8 @@ namespace Herrd.Website.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
+		private readonly IEnumerable<SelectListItem> _countryList;
+		
 		[Authorize]
 		public ActionResult EditProfile()
 		{
@@ -111,7 +114,8 @@ namespace Herrd.Website.Controllers
 				Surname = _dbUser.last_name,
 				Email = _dbUser.email,
 				City = _dbUser.city,
-				Countries = Helpers.CountryList.ToSelectListItems(_dbUser.country),
+				Website = _dbUser.websiteUrl,
+				Countries = _countryList,
 				IsPublic = !_dbUser.isPrivate
 			};
 			return View(model);
@@ -144,7 +148,8 @@ namespace Herrd.Website.Controllers
 					
 				}
 
-				return View();
+				model.Countries = _countryList;
+				return View(model);
 			}
 
 			return View();
