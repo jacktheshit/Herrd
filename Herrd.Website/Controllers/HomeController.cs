@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Herrd.DataLayer;
+using Herrd.Extensions.Models;
 
 namespace Herrd.Website.Controllers
 {
@@ -65,24 +66,35 @@ namespace Herrd.Website.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult AddTrack (Track track)
+		public ActionResult AddTrack (AddTrackModel trackModel)
 		{
-			//update track object to have defaults
-			track.archive = false;
-			track.playlist = false;
-			track.date = DateTime.Now;
-
-			//add track to user
-			if (_dbUser == null) return HttpNotFound();
-			_dbUser.Tracks.Add(track);
-
-			//save
-			try
+			if (ModelState.IsValid)
 			{
-				_db.SubmitChanges();
-				return PartialView("~/Views/Partials/TrackItemNormal.cshtml", track);
+				var track = new Track
+				{
+					title = trackModel.Title,
+					term = trackModel.Term,
+					archive = false,
+					playlist = false,
+					date = DateTime.Now
+				};
+
+				//add track to user
+				if (_dbUser == null) return HttpNotFound();
+				_dbUser.Tracks.Add(track);
+
+				//save
+				try
+				{
+					_db.SubmitChanges();
+					return PartialView("~/Views/Partials/TrackItemNormal.cshtml", track);
+				}
+				catch (Exception e)
+				{
+					return HttpNotFound();
+				}
 			}
-			catch (Exception e)
+			else
 			{
 				return HttpNotFound();
 			}

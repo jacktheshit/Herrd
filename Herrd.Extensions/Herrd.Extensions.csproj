@@ -57,6 +57,8 @@
   <ItemGroup>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Models\AddTrackModel.cs" />
+    <Compile Include="Models\EditProfileModel.cs" />
     <Compile Include="Models\EditTrackModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />

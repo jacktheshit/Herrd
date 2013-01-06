@@ -1,4 +1,4 @@
-﻿@model Herrd.DataLayer.User
+﻿@model Herrd.Extensions.Models.EditProfileModel
 
 @{
     ViewBag.Title = "EditProfile";
@@ -25,21 +25,29 @@
 			</ul>
 		</div>
 		<div class="bd">
-			<form class="form_std" action="includes/functions/signup.php" method="post">
-				<label name="first_name" for="first_name">First name</label>
-				<input type="text" name="first_name" id="first_name">
-				<label name="last_name" for="last_name">Last name</label>
-				<input type="text" name="last_name" id="last_name">
-				<label name="username" for="username">Username</label>
-				<input type="text" name="username" id="username" value="adamduncan">
-				<label name="email" for="email">Email address</label>
-				<input type="text" name="email" id="email" value="adamduncan01@hotmail.com">
-				<label name="website" for="website">Website</label>
-				<input type="text" name="website" id="website" value="http://">
-				<label name="city" for="city">City</label>
-				<input type="text" name="city" id="city">
-				<label name="country" for="country">Country</label>
-				<select name="country">
+			@using(Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "form_std"}))
+			{
+				
+				@Html.LabelFor(x => x.Firstname)
+				@Html.TextBoxFor(x => x.Firstname)
+
+				@Html.LabelFor(x => x.Surname)
+				@Html.TextBoxFor(x => x.Surname)
+
+				@Html.LabelFor(x => x.Username)
+				@Html.TextBoxFor(x => x.Username)
+
+				@Html.LabelFor(x => x.Email)
+				@Html.TextBoxFor(x => x.Email)
+
+				@Html.LabelFor(x => x.Website)
+				@Html.TextBoxFor(x => x.Website)
+
+				@Html.LabelFor(x => x.City)
+				@Html.TextBoxFor(x => x.City)
+
+				@Html.LabelFor(x => x.Country)
+				<select name="Country">
 					<option value="" selected="selected">Select country</option>
 					<option value="Afganistan">Afghanistan</option>
 					<option value="Albania">Albania</option>
@@ -288,18 +296,24 @@
 					<option value="Zambia">Zambia</option>
 					<option value="Zimbabwe">Zimbabwe</option>
 				</select>
+
 				<div class="hr"><!--hr--></div>
-				<label name="privacy" for="privacy">Profile privacy</label>
+
+				@Html.LabelFor(x => x.IsPrivate)
 				<p>Choose Private to hide your Herrd playlists.<br> All accounts set to Public by default.</p>
-				<input type="radio" name="privacy" id="public" checked="checked">
-				<label name="public" for="public" class="radio">Public</label>
-				<input type="radio" name="privacy" id="private">
-				<label name="privacy" for="private" class="radio">Private</label>
+
+				@Html.RadioButtonFor(x => x.IsPublic, new { @checked = "checked"})
+				<label name="IsPublic" for="IsPublic" class="radio">Public</label>
+	
+				@Html.RadioButtonFor(x => x.IsPrivate, new { @checked = "checked"})
+				<label name="privacy" for="IsPrivate" class="radio">Private</label>
+
 				<div class="spacer half">
 					<!--spacer-->
 				</div>
+
 				<input class="submit_std" type="submit" value="Save">
-			</form>
+			}
 		</div>
 	</div>
 	<div class="push">

@@ -32,8 +32,8 @@ var Listing = {
 		$('#form_add').submit(function (event) {
 			event.preventDefault();
 			var $form = $(this),
-				$term = $form.find('textarea[name="term"]').val(),
-				$title = $form.find('input[name="title"]').val(),
+				$term = $form.find('textarea[name="Term"]').val(),
+				$title = $form.find('input[name="Title"]').val(),
 				url = $form.attr('action');
 
 			$form.append('<div class="saved" style="opacity:0"><p>Saving...</p></div>');
@@ -55,6 +55,11 @@ var Listing = {
 					$updatedData.animate({ opacity: 0 }, 0, function () {
 						$(this).delay(300).animate({ opacity: 1 }, 300);
 					});
+				},
+				error: function (xhr) {
+					Debug.log(xhr.statusText);
+					$('.saved').html("<p>Error : " + xhr.statusText + "</p>");
+					$('.saved', $form).animate({ opacity: 0 }, 300);
 				}
 			});
 		});

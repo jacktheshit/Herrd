@@ -90,9 +90,17 @@ namespace Herrd.Website.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
+		[Authorize]
 		public ActionResult EditProfile()
 		{
-			return View();
+			return View(new EditProfileModel());
+		}
+
+		[Authorize]
+		[HttpPost]
+		public ActionResult EditProfile(EditProfileModel model)
+		{
+			return HttpNotFound();
 		}
 
 	}

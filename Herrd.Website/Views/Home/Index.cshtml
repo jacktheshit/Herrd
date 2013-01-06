@@ -1,4 +1,5 @@
 ﻿@using Herrd.DataLayer
+@using Herrd.Extensions.Models
 @model List<Herrd.DataLayer.Track>
 
 @{
@@ -8,7 +9,7 @@
 
 <div id="playlist" class="site_container">
 
-	@Html.Partial("~/Views/Partials/FormAddTrack.cshtml", new Track())
+	@Html.Partial("~/Views/Partials/FormAddTrack.cshtml", new AddTrackModel())
 
 	<div class="item_container">
 		
