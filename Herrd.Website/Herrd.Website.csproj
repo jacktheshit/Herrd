@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArchiveController.cs" />
+    <Compile Include="Controllers\FeedController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -218,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\RazorHelpers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Feed\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

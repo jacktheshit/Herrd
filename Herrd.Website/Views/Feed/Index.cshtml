@@ -1,0 +1,27 @@
+﻿@using Herrd.Extensions.Models
+@model IEnumerable<Herrd.DataLayer.Track>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_layout.cshtml";
+}
+
+<div class="site_container">
+
+	<div class="item_container">
+		
+		@if(Model.Any())
+		{
+			foreach (var track in Model)
+			{
+				@Html.Partial("~/Views/Partials/TrackItemNormal.cshtml", track)
+			}
+		}
+		else
+		{
+			<p>Somethings wrong there should be some tracks here.</p>
+		}
+	
+	</div>
+	
+</div>

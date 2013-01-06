@@ -15,6 +15,13 @@ namespace Herrd.Website
 
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+			//feed
+			routes.MapRouteLowercase(
+				name: "Feed",
+				url: "feed/{action}",
+				defaults: new { controller = "Feed", action = "Index" }
+			);
+
 			//archive
 			routes.MapRouteLowercase(
 				name: "Archive",
