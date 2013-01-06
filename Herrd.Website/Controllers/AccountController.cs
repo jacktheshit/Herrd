@@ -4,16 +4,26 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Herrd.DataLayer;
+using Herrd.Extensions;
 using Herrd.Extensions.Providers.Members;
 using WebMatrix.WebData;
 using Herrd.Extensions.Models;
+using Herrd.Extensions;
 
 namespace Herrd.Website.Controllers
 {
 	public class AccountController : Controller
 	{
-		//
-		// GET: /Account/
+		private readonly HerrdDBDataContext _db = new HerrdDBDataContext();
+		private readonly MembershipUser _currentUser;
+		private readonly User _dbUser;
+
+		public AccountController()
+		{
+			_currentUser = Membership.GetUser();
+			if (_currentUser != null) _dbUser = _db.Users.FirstOrDefault(x => x.email == _currentUser.Email);
+		}
 
 		public ActionResult Index()
 		{
@@ -93,14 +103,51 @@ namespace Herrd.Website.Controllers
 		[Authorize]
 		public ActionResult EditProfile()
 		{
-			return View(new EditProfileModel());
+			//set some defaults for the radio buttons
+			var model = new EditProfileModel
+			{
+				Username = _dbUser.user_name,
+				Firstname = _dbUser.first_name,
+				Surname = _dbUser.last_name,
+				Email = _dbUser.email,
+				City = _dbUser.city,
+				Countries = Helpers.CountryList.ToSelectListItems(_dbUser.country),
+				IsPublic = !_dbUser.isPrivate
+			};
+			return View(model);
 		}
 
 		[Authorize]
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public ActionResult EditProfile(EditProfileModel model)
 		{
-			return HttpNotFound();
+			if (ModelState.IsValid)
+			{
+				_dbUser.user_name = model.Username;
+				_dbUser.first_name = model.Firstname;
+				_dbUser.last_name = model.Surname;
+				_dbUser.email = model.Email;
+				_dbUser.city = model.City;
+				_dbUser.websiteUrl = model.Website;
+				_dbUser.country = model.Country;
+				_dbUser.isPrivate = !model.IsPublic;
+
+				_dbUser.lastActivityDate = DateTime.Now;
+
+				try
+				{
+					_db.SubmitChanges();
+				}
+				catch(Exception e)
+				{
+					
+				}
+
+				return View();
+			}
+
+			return View();
 		}
 
 	}

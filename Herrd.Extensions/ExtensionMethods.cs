@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Herrd.Extensions.Providers.Members;
 
 namespace Herrd.Extensions
 {
-	static class ExtensionMethods
+	public static class ExtensionMethods
 	{
 
 		public static string GetRoleType (this HeerdRoleProvider.RoleType enumValue)
@@ -20,6 +21,18 @@ namespace Herrd.Extensions
 					return "HerrdUser";
 			}
 			return "HerrdUser";
+		}
+
+		public static IEnumerable<SelectListItem> ToSelectListItems(this List<string> list, string selectedId)
+		{
+			return list.Select(x =>
+				new SelectListItem
+				{
+					Selected = (x == selectedId),
+					Text = x,
+					Value = x
+				}
+			);
 		}
 
 	}
