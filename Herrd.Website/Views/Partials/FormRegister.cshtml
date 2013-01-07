@@ -1,6 +1,6 @@
 ﻿@model Herrd.Extensions.Models.RegisterModel
 
-@using (Html.BeginForm("SignUp", "Account", FormMethod.Post, new { @class = "form_std no_border no_padding_bottom" }))
+@using (Html.BeginForm("SignUp", "Account", FormMethod.Post, new { @class = "form_std no_border no_padding_bottom", @id = "form_signup" }))
 {
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary()

@@ -33,36 +33,43 @@ var Listing = {
         $('#form_add').submit(function (event) {
             event.preventDefault();
             var $form = $(this),
-				$term = $form.find('textarea[name="Term"]').val(),
-				$title = $form.find('input[name="Title"]').val(),
-				url = $form.attr('action');
+                $term = $form.find('textarea[name="Term"]').val(),
+                $title = $form.find('input[name="Title"]').val(),
+                url = $form.attr('action');
+            if ($term == '' && $title == '') {
+                if (!$('.feedback').length) {
+                    $form.append('<p class="error feedback">Please enter something</p>');
+                };
+            } else {
+                $form.find('.feedback').remove();
 
-            $form.append('<div class="saved" style="opacity:0"><p>Saving...</p></div>');
-            $('.saved', $form).animate({ opacity: 1 }, 300);
+                $form.append('<div class="saved" style="opacity:0"><p>Saving...</p></div>');
+                $('.saved', $form).animate({ opacity: 1 }, 300);
 
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: { term: $term, title: $title },
-                success: function (data) {
-                    $form.find('textarea[name="term"]').attr('value', '');
-                    $form.find('input[name="title"]').attr('value', '');
-                    $form.find($(Input.resetClass)).hide();
-                    $('.saved', $form).animate({ opacity: 0 }, 300, function () {
-                        //$('.arc_res p', $item).html('Saved');
-                    });
-                    var $updatedData = $(data).filter('div');
-                    $('.item_container').prepend($updatedData);
-                    $updatedData.animate({ opacity: 0 }, 0, function () {
-                        $(this).delay(300).animate({ opacity: 1 }, 300);
-                    });
-                },
-                error: function (xhr) {
-                    Debug.log(xhr.statusText);
-                    $('.saved').html("<p>Error : " + xhr.statusText + "</p>");
-                    $('.saved', $form).animate({ opacity: 0 }, 300);
-                }
-            });
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { term: $term, title: $title },
+                    success: function (data) {
+                        $form.find('textarea[name="term"]').attr('value', '');
+                        $form.find('input[name="title"]').attr('value', '');
+                        $form.find($(Input.resetClass)).hide();
+                        $('.saved', $form).animate({ opacity: 0 }, 300, function () {
+                            //$('.arc_res p', $item).html('Saved');
+                        });
+                        var $updatedData = $(data).filter('div');
+                        $('.item_container').prepend($updatedData);
+                        $updatedData.animate({ opacity: 0 }, 0, function () {
+                            $(this).delay(300).animate({ opacity: 1 }, 300);
+                        });
+                    },
+                    error: function (xhr) {
+                        Debug.log(xhr.statusText);
+                        $('.saved').html("<p>Error : " + xhr.statusText + "</p>");
+                        $('.saved', $form).animate({ opacity: 0 }, 300);
+                    }
+                });
+            };
         });
     },
 
@@ -403,10 +410,10 @@ var Forms = {
     validate: function () {
 
         $('#form_profile').find('input').on({
-            'click focus': function() {
-                    // only run Validate on first click/focus
-                    if (Forms.ready) {
-                        $('#form_profile').validate({
+            'click focus': function () {
+                // only run Validate on first click/focus
+                if (Forms.ready) {
+                    $('#form_profile').validate({
                         rules: {
                             Username: {
                                 required: true/*,
@@ -437,7 +444,62 @@ var Forms = {
                     Forms.ready = false;
                 };
             },
-            'blur': function() {
+            'blur': function () {
+                if ($(this).val() == '') {
+                    $(this).removeClass('valid');
+                };
+            }
+        });
+
+        $('#form_signup').find('input').on({
+            'click focus': function () {
+                // only run Validate on first click/focus
+                if (Forms.ready) {
+                    $('#form_signup').validate({
+                        rules: {
+                            UserName: {
+                                required: true/*,
+                                remote: */
+                            },
+                            Email: {
+                                required: true,
+                                email: true/*,
+                                remote: */
+                            },
+                            Password: {
+                                required: true,
+                                minlength: 6
+                            },
+                            ConfirmPassword: {
+                                required: true,
+                                equalTo: "#Password",
+                                minlength: 6
+                            }
+                        },
+                        messages: {
+                            UserName: {
+                                required: "Please enter a username"/*,
+                                remote: jQuery.format("Sorry, {0} is already in use")*/
+                            },
+                            Email: {
+                                required: "Please enter a valid email"/*,
+                                remote: jQuery.format("Sorry, {0} is already in use")*/
+                            },
+                            Password: {
+                                required: "Please enter a password",
+                                minlength: "Passwords must be 6 characters or more"
+                            },
+                            ConfirmPassword: {
+                                required: "Please re-enter your password",
+                                equalTo: "Please make sure your passwords match",
+                                minlength: "Passwords must be 6 characters or more"
+                            }
+                        }
+                    });
+                    Forms.ready = false;
+                };
+            },
+            'blur': function () {
                 if ($(this).val() == '') {
                     $(this).removeClass('valid');
                 };

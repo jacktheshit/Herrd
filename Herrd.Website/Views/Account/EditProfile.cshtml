@@ -30,11 +30,11 @@
 				@Html.LabelFor(x => x.Surname)
 				@Html.TextBoxFor(x => x.Surname)
 
-				@Html.LabelFor(x => x.Username)
+				@Html.LabelFor(x => x.Username, new { @class = "required"})
 				@Html.TextBoxFor(x => x.Username)
 				@Html.ValidationMessageFor(x => x.Username)
 
-				@Html.LabelFor(x => x.Email)
+				@Html.LabelFor(x => x.Email, new { @class = "required"})
 				@Html.TextBoxFor(x => x.Email)
 				@Html.ValidationMessageFor(x => x.Email)
 

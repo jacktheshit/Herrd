@@ -605,6 +605,14 @@ form input[type=submit], form input.submit_edit
 	height: 0;
 	overflow: hidden;
 }
+form .required:after {
+	color: #f50028;
+	content: "*";
+	font-size: 0.75em;
+	left: 0.2em;
+	position: relative;
+	top: -0.3em;
+}
 form .error,
 form .error:focus {
 	border-color: #f50028;
@@ -623,6 +631,12 @@ form label.error {
 	font-size: 0.75em;
 	margin: -10px 0 20px;
 	text-transform: uppercase;
+}
+
+.feedback {
+	background: url(/images/icon-validation.png) no-repeat 0 -100px;
+	margin: 10px 0 0;
+	padding: 5px 0 3px 25px;
 }
 
 /* Search */
