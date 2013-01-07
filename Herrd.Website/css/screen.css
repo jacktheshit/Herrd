@@ -109,11 +109,6 @@ html, body
 	padding: 90px 0 80px;
 }
 
-#playlist
-{
-	padding: 60px 0 80px;
-}
-
 .footer
 {
 	background-color: #ddd;
@@ -486,7 +481,7 @@ ul, ol
 }
 #form_add
 {
-	margin: 20px 0 50px;
+	margin: 0 0 50px;
 }
 .item .form_container
 {
@@ -523,6 +518,12 @@ form .input_title
 	max-width: 506px;
 	width: 506px;
 	padding: 4px 30px 4px 4px;
+}
+
+form input.disabled,
+form input.disabled:focus {
+	color: #ccc;
+	border-color: #ccc;
 }
 
 .item form textarea
@@ -598,7 +599,32 @@ form input[type=submit], form input.submit_edit
 	{
 		margin-bottom: 0;
 	}
-	
+
+/* Validation */
+.validation-summary-valid {
+	height: 0;
+	overflow: hidden;
+}
+form .error,
+form .error:focus {
+	border-color: #f50028;
+	color: #f50028;
+}
+form input.valid,
+form input.error {
+	background: #fff url(/images/icon-validation.png) no-repeat right 0;
+	padding-right: 35px;
+	width: 329px;
+}
+form input.error {
+	background-position: right -100px;
+}
+form label.error {
+	font-size: 0.75em;
+	margin: -10px 0 20px;
+	text-transform: uppercase;
+}
+
 /* Search */
 .search_field
 {
