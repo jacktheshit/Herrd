@@ -236,7 +236,7 @@ var Interact = {
 		$(Interact.itemClass).live('click', function (event) {
 			if (event.target.nodeName == 'A' || event.target.nodeName == 'INPUT' || event.target.nodeName == 'TEXTAREA') return;
 			var $this = $(this)
-			$(Interact.expandClass, $this).slideToggle();
+			$(Interact.expandClass, $this).slideToggle(250);
 			$this.toggleClass(Interact.toggleClass);
 			if ($('iframe', $this).length && $('iframe', $this).attr('src') === undefined && $this.hasClass(Interact.toggleClass)) {
 				$('iframe', $this).attr('src', $(Interact.expandClass, $this).attr('data-src'));
@@ -248,11 +248,11 @@ var Interact = {
 	hover: function () {
 		$(Interact.controlsClass).animate({ opacity: 0 }, 0);
 		$(Interact.itemClass).live('mouseover', function () {
-			$(Interact.controlsClass, this).css('visibility', 'visible').stop().animate({ opacity: 1 }, 300);
+			$(Interact.controlsClass, this).css('visibility', 'visible').stop().animate({ opacity: 1 }, 150);
 		});
 		$(Interact.itemClass).live('mouseout', function () {
 			if (!$(this).hasClass(Interact.toggleClass)) {
-				$(Interact.controlsClass, this).stop().animate({ opacity: 0 }, 300);
+				$(Interact.controlsClass, this).stop().animate({ opacity: 0 }, 150);
 			};
 		});
 	}
@@ -312,23 +312,30 @@ var Search = {
 };
 
 var Account = {
+    container: '.profile',
+    avatar: '.avatar',
+    menu: '.account',
 
-	container: '.profile',
-	avatar: '.avatar',
-	menu: '.account',
+    dropdown: function() {
 
-	dropdown: function () {
+        $(Account.avatar).on('click', function(e) {
+            var $this = $(this);
+            $this.next().toggle().toggleClass('open');
+            $this.toggleClass('selected');
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        
+        $('body').not(Account.menu).on('click', function (e) {
+            if ($(Account.avatar).hasClass('selected') && !$(e.target).hasClass(Account.menu.slice(1)) && e.target.nodeName != 'A') {
+                $(Account.avatar).removeClass('selected').next().hide().removeClass('open');
+                e.stopPropagation();
+                e.preventDefault();
+            };
+        });
+    }
 
-		$(Account.avatar).on('click', function (e) {
-			var $this = $(this);
-			$this.parents(Account.container).find(Account.menu).toggle().toggleClass('open');
-			$this.toggleClass('selected');
-			e.stopPropagation();
-			e.preventDefault();
-		});
-
-	}
-}
+};
 
 var Input = {
 

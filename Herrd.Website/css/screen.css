@@ -106,12 +106,12 @@ html, body
 
 .site_container
 {
-	padding: 100px 0 80px;
+	padding: 90px 0 80px;
 }
 
 #playlist
 {
-	padding: 70px 0 80px;
+	padding: 60px 0 80px;
 }
 
 .footer
@@ -140,7 +140,7 @@ html, body
 	top: 0;
 	left: 0;
 	height: 20px;
-	padding: 22px 0 25px;
+	padding: 18px 0;
 	width: 100%;
 	background-color: #222;
 	z-index: 2;
@@ -212,7 +212,7 @@ html, body
 	}
 .loader .inner
 {
-	background: url(../images/icon-loader.gif) no-repeat 50% 40%;
+	background: url(/images/icon-loader.gif) no-repeat 50% 40%;
 }
 
 /* modules */
@@ -364,7 +364,7 @@ ul, ol
 	width: 17px;
 	height: 17px;
 	text-indent: -9999px;
-	background: url(../images/icon-list.gif) no-repeat 0 0;
+	background: url(/images/icon-list.gif) no-repeat 0 0;
 }
 
 	.btn_expand:hover, .btn_expand:focus, .open
@@ -559,7 +559,7 @@ form .title
 		top: 7px;
 		width: 17px;
 		height: 17px;
-		background: url(../images/icon-clear.gif) no-repeat 0 0;
+		background: url(/images/icon-clear.gif) no-repeat 0 0;
 		text-indent: -9999px;
 	}
 
@@ -606,7 +606,7 @@ form input[type=submit], form input.submit_edit
 }
 .search_link
 {
-	background: url(../images/icon-search.png) no-repeat 0 0;
+	background: url(/images/icon-search.png) no-repeat 0 0;
 	display: block;
 	height: 19px;
 	text-indent: -9999px;
@@ -803,7 +803,7 @@ form input[type=submit], form input.submit_edit
 }
 	.avatar span
 	{
-		background: url(../images/avatar-settings.png) no-repeat center center;
+		background: url(/images/avatar-settings.png) no-repeat center center;
 		display: none;
 		height: 30px;
 		left: 0;
