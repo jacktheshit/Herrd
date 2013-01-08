@@ -16,6 +16,14 @@
 			<p class="hm">
 				<img src="@Helpers.GetAvatarUrl(Model.Email, 152)" width="152" alt="@Model.Username" class="rounded">
 			</p>
+            <ul class="controls blocks">
+				<li>
+					<a href="http://gravatar.com/emails" class="external" title="Avatars from Gravatar.com">Edit avatar</a>
+				</li>
+				<li>
+					<a href="#">Reset password</a>
+				</li>
+			</ul>
 		</div>
 		<div class="bd">
 			@using(Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "form_std", @id = "form_profile" }))

@@ -14,8 +14,12 @@
 	}
 	else
 	{
-		<li>
-			@Html.ActionLink("Login / Signup", "SignUp", "Account")
+		<li class="no_margin_right">
+			@Html.ActionLink("Sign up", "SignUp", "Account")
+            @Html.Raw("&nbsp;or&nbsp;&nbsp;")
+		</li>
+		<li class="no_margin_right">
+			@Html.ActionLink("Log in", "SignUp", "Account")
 		</li>
 	}
 </ul>
