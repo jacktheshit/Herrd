@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<!--[if IE 7 ]><html lang="en class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="en class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Herrd BETA</title>
+    <meta name="viewport" content="width=582">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+    <script type="text/javascript">(function (H) { H.className = H.className.replace(/\bno-js\b/, 'js') })(document.documentElement)</script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <div class="inner">
+                <p class="h2 reverse float_left">
+                    <a href="index.php">
+                        <img src="/images/logo.png" alt="Herd BETA logo" />
+                    </a>
+                </p>
+                <div class="profile float_right">
+                    <a href="#" class="avatar block">
+                        <img src="/images/avatar.jpg" width="30" height="30" /><span><!--cog--></span>
+                    </a>
+                    <div class="account">
+                        <span class="arrow">
+                            <!--arrow-->
+                        </span>
+                        <ul class="nav_account">
+                            <li>
+                                <a href="edit-profile.php">Edit profile</a>
+                            </li>
+                            <li>
+                                <a href="login.php">Log out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <ul class="nav float_right">
+                    <li>
+                        <a href="index.php" class="current">Playlist</a>
+                    </li>
+                    <li>
+                        <a href="archive.php">Archive</a>
+                    </li>
+                    <li>
+                        <a href="#">Feed</a>
+                    </li>
+                </ul>
+                <div class="search_field float_right">
+                    <a href="#" class="search_link float_right">Search</a>
+                    <input type="text" value="" placeholder="Search" id="search_filter" class="search_input input_title" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+        <div id="playlist" class="site_container">
+            <div class="form_container">
+                <form id="form_add" action="" method="post">
+                    <label name="term" for="term">Link</label>
+                    <textarea name="term" placeholder="Add..."></textarea>
+                    <label name="title" for="title">Title</label>
+                    <div class="title">
+                        <input class="input_title" type="text" name="title" placeholder="Title (optional)" />
+                        <a href="#" class="reset">Clear field</a>
+                    </div>
+                    <input id="submit_add" type="submit" value="Save" />
+                </form>
+            </div>
+            <div class="item_container">
+                <div class="item match memo">
+                    <div class="media">
+                        <div class="med_l artwork"><img src="/images/artwork-memo.png" alt="Welcome" /></div>
+                        <div class="bd">
+                            <h2>Welcome</h2>
+                            <p class="date no_margin_bottom">07 January 2013</p>
+                        </div>
+                    </div>
+                    <div class="expand">
+                        <div class="inner">
+                            <p>This is an example of a MEMO. If adding URLs or media, this is where the links and players will be embedded.</p>
+                        </div>
+                    </div>
+                    <div class="controls_container">
+                        <ul class="controls">
+                            <li><a class="btn_archive" href="#">Archive</a></li>
+                            <li><a class="btn_edit" href="#">Edit<span><!--arrow--></span></a></li>
+                            <li><a class="btn_delete" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+                    <div class="form_container">
+                        <form action="" method="post">
+                            <label name="term" for="term">Link</label><textarea name="term" placeholder="Add...">This is an example of a MEMO. If adding URLs or media, this is where the players will be embedded.</textarea><label name="title" for="title">Title</label><div class="title">
+                                <input class="input_title" type="text" name="title" placeholder="Title (optional)" value="Welcome" /><a href="#" class="reset">Clear field</a>
+                            </div>
+                            <input class="submit_edit float_left" type="submit" value="Save" /><p class="button_height float_left no_margin_bottom">or <a class="btn_cancel" href="#">Cancel</a></p>
+                            <div class="clearer">
+                                <!--clearer-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="push">
+            <!--push-->
+        </div>
+
+    </div>
+    <div class="footer">
+        <div class="inner">
+            <ul class="nav_footer float_right">
+                <li>
+                    <a href="about.php">About</a>
+                </li>
+                <li class="no_margin_right">
+                    <a href="mailto:hello@herd.coasdjkew">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="tour">
+        <div class="inner">
+            <div class="hotspot" style="display: block; left: 165px; top: 121px;">
+                <span class="spot"></span>
+                <div class="tooltip">
+                    <span class="arrow">
+                        <!--arrow-->
+                    </span>
+                    <h3 class="hm reverse">Welcome to Herrd</h3>
+                    <p class="hm reverse">To get started, enter your items here as a memo or by pasting a URL.</p>
+                    <p class="reverse">Supported media (YouTube, Soundcloud, Spotify, Vimeo) will embed the players right here in your playlist.</p>
+                    <a href="#" class="btn tour_next rounded hm float_right">Next</a>
+                    <div class="clearer">
+                        <!--clear-->
+                    </div>
+                </div>
+            </div>
+            <div class="hotspot" style="left: 165px; top: 188px;">
+                <span class="spot"></span>
+                <div class="tooltip">
+                    <span class="arrow">
+                        <!--arrow-->
+                    </span>
+                    <p class="hm reverse">The <strong>title</strong> can be entered manually, but will be generated automatically for all supported media.</p>
+                    <a href="#" class="btn tour_next rounded hm float_right">Next</a>
+                    <p class="hm float_left"><a href="#" class="progress tour_prev">Previous</a></p>
+                    <div class="clearer">
+                        <!--clear-->
+                    </div>
+                </div>
+            </div>
+            <div class="hotspot" style="left: 102px; top: 228px;">
+                <span class="spot"></span>
+                <div class="tooltip">
+                    <span class="arrow">
+                        <!--arrow-->
+                    </span>
+                    <p class="hm reverse">Hit <strong>SAVE</strong> to add the item to your Herrd.</p>
+                    <a href="#" class="btn tour_next rounded hm float_right">Next</a>
+                    <p class="hm float_left"><a href="#" class="progress tour_prev">Previous</a></p>
+                    <div class="clearer">
+                        <!--clear-->
+                    </div>
+                </div>
+            </div>
+            <div class="hotspot" style="left: 273px; top: 318px;">
+                <span class="spot"></span>
+                <div class="tooltip">
+                    <span class="arrow">
+                        <!--arrow-->
+                    </span>
+                    <p class="hm reverse">All items added appear in your <strong>playlist</strong>. Click on them to access the media, or use the controls to <strong>Archive</strong>, <strong>Edit</strong> or <strong>Delete</strong> them when you're ready.</p>
+                    <a href="#" class="btn tour_next rounded hm float_right">Next</a>
+                    <p class="hm float_left"><a href="#" class="progress tour_prev">Previous</a></p>
+                    <div class="clearer">
+                        <!--clear-->
+                    </div>
+                </div>
+            </div>
+            <div class="hotspot" style="left: 299px; top: 40px;">
+                <span class="spot"></span>
+                <div class="tooltip">
+                    <span class="arrow">
+                        <!--arrow-->
+                    </span>
+                    <p class="hm reverse">Use the main navigation to access your <strong>Archive</strong>, or view the <strong>Feed</strong> page to see what others are listening to.</p>
+                    <p class="hm reverse">Access your <strong>Account</strong> by clicking on your avatar in the top right.</p>
+                    <a href="#" class="btn tour_next rounded hm float_right">Next</a>
+                    <p class="hm float_left"><a href="#" class="progress tour_prev">Previous</a></p>
+                    <div class="clearer">
+                        <!--clear-->
+                    </div>
+                </div>
+            </div>
+            <div class="hotspot" style="left: 249px; top: 40px;">
+                <span class="spot"></span>
+                <div class="tooltip">
+                    <span class="arrow">
+                        <!--arrow-->
+                    </span>
+                    <p class="hm reverse">Finally, be sure to make use of <strong>search</strong> to filter through any Herrd by title, date or service.</p>
+                    <a href="#" class="btn tour_next tour_go rounded hm float_right">Get started</a>
+                    <p class="hm float_left"><a href="#" class="progress tour_prev">Previous</a></p>
+                    <div class="clearer">
+                        <!--clear-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/scripts/common.js"></script>
+</body>
+</html>

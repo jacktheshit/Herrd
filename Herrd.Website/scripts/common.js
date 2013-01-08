@@ -22,6 +22,7 @@ var Main = {
         Input.inputKeypress();
         Input.inputClear();
         Forms.validate();
+        Tour.init();
         Utils.externalLink();
     }
 
@@ -505,6 +506,59 @@ var Forms = {
                 };
             }
         });
+
+    }
+
+};
+
+var Tour = {
+
+    selector: '.tour',
+    hotspot: '.hotspot',
+    nextSelector: '.tour_next',
+    prevSelector: '.tour_prev',
+    progress: '.spot',
+    start: 1,
+
+    init: function () {
+
+        if ($(Tour.selector).length) {
+
+            var hotspotCount = $(Tour.hotspot).length;
+
+            $(Tour.hotspot).each(function (i) {
+                var $this = $(this);
+
+                $this.attr('id', 'tip_' + (i + 1))
+                $this.find(Tour.progress).html((i + 1) + '/' + hotspotCount);
+            });
+
+            $(Tour.nextSelector).on('click', function (e) {
+                var $this = $(this),
+                    $thisHotspot = $this.parents(Tour.hotspot),
+                    position = parseInt($thisHotspot.attr('id').slice(-1));
+
+                if (position < hotspotCount) {
+                    $thisHotspot.hide();
+                    $thisHotspot.next().show();
+                } else {
+                    $(Tour.selector).animate({ opacity: 0 }, 150, function () {
+                        $(this).remove();
+                    });
+                };
+                e.preventDefault();
+            });
+
+            $(Tour.prevSelector).on('click', function (e) {
+                var $this = $(this),
+                    $thisHotspot = $this.parents(Tour.hotspot);
+
+                    $thisHotspot.hide();
+                    $thisHotspot.prev().show();
+                e.preventDefault();
+            });
+
+        };
 
     }
 

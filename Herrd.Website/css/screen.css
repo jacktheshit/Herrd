@@ -98,7 +98,7 @@ html, body
 	margin: 0 auto;
 }
 
-.header .inner, .footer .inner
+.header .inner, .footer .inner, .tour .inner
 {
 	width: 542px;
 	margin: 0 auto;
@@ -918,7 +918,91 @@ form label.error {
 		line-height: 1.667;
 	}
 
+/*--------------------------------------------------=> TOUR */
+.tour {
+	background-color: rgba(255, 255, 255, 0.6);
+	height: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 5;
+}
+.tour .inner {
+	position: relative;
+}
+.hotspot {
+	position: absolute;
+	display: none;
+}
+.spot {
+	background: url(/images/icon-hotspot.png) no-repeat 0 0;
+	display: block;
+	font-size: 0.75em;
+	font-weight: bold;
+	line-height: 19px;
+	padding: 0 0 0 22px;
+}
+.tooltip {
+	background-color: #333;
+	border-radius: 2px;
+	left: -16px;
+	padding: 10px 10px 2px;
+	position: relative;
+	top: 11px;
+	width: 240px;
+}
+.tour .arrow
+{
+	position: absolute;
+	height: 0;
+	width: 0;
+	border: 10px solid;
+	border-color: transparent transparent #333 transparent;
+	top: -15px;
+	left: 16px;
+}
+.tooltip p {
+	font-size: 0.75em;
+}
+.tooltip p strong {
+	text-transform: uppercase;
+}
+.progress {
+	line-height: 30px;
+	color: #888;
+}
+.progress:hover {
+	color: #fff;
+}
+.btn {	
+	width: 90px;
+	color: #fff;
+	background-color: #666;
+	font-size: 0.75em;
+	line-height: 30px;
+	margin: 0 0 8px 8px;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+.btn:hover {
+	background-color: #888;
+	color: #fff;
+}
+.tour_go {
+	width: 130px;
+	background-color: #06dd7f;
+}
+.tour_go:hover {
+	background-color: #50e7a5;
+}
+
 /*--------------------------------------------------=> UTILITY */
+.reverse {
+	color: #fff;
+}
+
 .hr
 {
 	display:block;
