@@ -517,6 +517,7 @@ var Tour = {
     hotspot: '.hotspot',
     nextSelector: '.tour_next',
     prevSelector: '.tour_prev',
+    skipSelector: '.close',
     progress: '.spot',
     start: 1,
 
@@ -555,6 +556,13 @@ var Tour = {
 
                     $thisHotspot.hide();
                     $thisHotspot.prev().show();
+                e.preventDefault();
+            });
+            
+            $(Tour.skipSelector).on('click', function (e) {
+                $(Tour.selector).animate({ opacity: 0 }, 150, function () {
+                    $(this).remove();
+                });
                 e.preventDefault();
             });
 

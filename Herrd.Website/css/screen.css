@@ -947,7 +947,7 @@ form label.error {
 	background-color: #333;
 	border-radius: 2px;
 	left: -16px;
-	padding: 10px 10px 2px;
+	padding: 30px 10px 2px;
 	position: relative;
 	top: 11px;
 	width: 240px;
@@ -996,6 +996,20 @@ form label.error {
 }
 .tour_go:hover {
 	background-color: #50e7a5;
+}
+.tour .close {
+	background: url(/images/icon-hotspot.png) no-repeat 0 -50px;
+	display: block;
+	height: 12px;
+	position: absolute;
+	right: 10px;
+	text-indent: -9999px;
+	top: 11px;
+	width: 12px;
+}
+.tour .close:hover,
+.tour .close:focus {
+	background-position: 0 -100px;
 }
 
 /*--------------------------------------------------=> UTILITY */
