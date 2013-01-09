@@ -26,20 +26,46 @@ namespace Herrd.Extensions.Providers.TrackServices
 			Term = term;
 			Title = title;
 			Type = "spotify";
-			GetToWork();
+			GetInfoFromTerm();
 		}
 
-		private void GetToWork()
+		private void GetInfoFromTerm()
 		{
 			if (Term.Contains("iframe"))
 			{
-				string[] first = Term.Split(new string[] {"<iframe src=\""}, StringSplitOptions.RemoveEmptyEntries);
-				string[] second = first[1].Split('"');
+				string[] first = Term.Split(new[] {"<iframe src=\""}, StringSplitOptions.RemoveEmptyEntries);
+				string[] second = first[0].Split('"');
 				EmbedUrl = second[0];
 			}
 			if (Term.Contains("http"))
 			{
-				
+				if(Term.Contains("/album"))
+				{
+					
+				}
+				if (Term.Contains("/track"))
+				{
+					
+				}
+				if(Term.Contains("/playlist"))
+				{
+					
+				}
+			}
+			if (Term.Contains("spotify:"))
+			{
+				if (Term.Contains("album:"))
+				{
+					
+				}
+				if (Term.Contains(":track"))
+				{
+					
+				}
+				if (Term.Contains(":playlist"))
+				{
+					
+				}
 			}
 		}
 	}

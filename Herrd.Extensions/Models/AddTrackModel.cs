@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Herrd.Extensions.Models
 {
@@ -12,6 +13,7 @@ namespace Herrd.Extensions.Models
 
 		public string Title { get; set; }
 
+		[AllowHtml]
 		[Required]
 		public string Term { get; set; }
 
