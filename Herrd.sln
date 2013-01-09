@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Herrd.Extensions", "Herrd.Extensions\Herrd.Extensions.csproj", "{047F8E16-594B-44FB-8515-3A78A7C0A6D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Herrd.Website", "Herrd.Website\Herrd.Website.csproj", "{2D4B06B5-843C-4861-A3DC-69F6C8842805}"

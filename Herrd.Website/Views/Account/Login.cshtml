@@ -1,0 +1,10 @@
+﻿@using Herrd.Extensions.Models
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/_layout.cshtml";
+}
+
+<div class="site_container">
+    <h2>Log in</h2>
+    @Html.Partial("~/Views/Partials/FormLogin.cshtml", new LoginModel())
+</div>

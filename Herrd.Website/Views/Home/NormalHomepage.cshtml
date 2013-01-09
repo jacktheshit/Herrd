@@ -1,10 +1,21 @@
-﻿@{
-	ViewBag.Title = "NormalHomepage";
-	Layout = "~/Views/_layout.cshtml";
+﻿@using Herrd.Extensions.Models
+@{
+    ViewBag.Title = "SignUp";
+    Layout = "~/Views/_layout.cshtml";
 }
 
 <div class="site_container">
-	<h1>Fuck You</h1>
-	<p>... you need to login or signup to see you music</p>
-	@Html.ActionLink("Login / Signup", "Signup", "Account")
+	<h1 class="no_display">Herd.</h1>
+	<p class="h1">A to-do list for music and videos.</p>
+	<div class="spacer">
+		<!--spacer-->
+	</div>
+
+	<h2>Sign up</h2>
+    <div class="spacer"><!--spacer--></div>
+	@Html.Partial("~/Views/Partials/FormRegister.cshtml", new RegisterModel())
+
+	<div class="push">
+		<!--push-->
+	</div>
 </div>

@@ -140,5 +140,10 @@ namespace Herrd.Website.Controllers
 			return RedirectToAction("Index");
 		}
 
+		public ActionResult About()
+		{
+			return View(_dbUser);
+		}
+
 	}
 }

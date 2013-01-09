@@ -69,7 +69,7 @@ namespace Herrd.Website.Controllers
 
 		public ActionResult Login ()
 		{
-			return RedirectToAction("SignUp");
+			return View();
 		}
 
 		[HttpPost]
