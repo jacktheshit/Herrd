@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Herrd.DataLayer;
+using Herrd.Extensions;
 using Herrd.Extensions.Models;
 
 namespace Herrd.Website.Controllers
@@ -70,29 +71,38 @@ namespace Herrd.Website.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var track = new Track
-				{
-					title = trackModel.Title,
-					term = trackModel.Term,
-					archive = false,
-					playlist = false,
-					date = DateTime.Now
-				};
 
-				//add track to user
-				if (_dbUser == null) return HttpNotFound();
-				_dbUser.Tracks.Add(track);
+				var processTrack = new ProcessTrack(trackModel.Term, trackModel.Title);
+				var service = processTrack.GetService();
 
-				//save
-				try
-				{
-					_db.SubmitChanges();
-					return PartialView("~/Views/Partials/TrackItemNormal.cshtml", track);
-				}
-				catch (Exception e)
-				{
-					return HttpNotFound();
-				}
+				return HttpNotFound();
+
+				//var track = new Track
+				//{
+				//	title = service.Title,
+				//	term = service.Term,
+				//	embed_url = service.EmbedUrl,
+				//	artwork = service.Artwork,
+				//	type = service.Type,
+				//	archive = false,
+				//	playlist = false,
+				//	date = DateTime.Now
+				//};
+
+				////add track to user
+				//if (_dbUser == null) return HttpNotFound();
+				//_dbUser.Tracks.Add(track);
+
+				////save
+				//try
+				//{
+				//	_db.SubmitChanges();
+				//	return PartialView("~/Views/Partials/TrackItemNormal.cshtml", track);
+				//}
+				//catch (Exception e)
+				//{
+				//	return HttpNotFound();
+				//}
 			}
 			else
 			{
