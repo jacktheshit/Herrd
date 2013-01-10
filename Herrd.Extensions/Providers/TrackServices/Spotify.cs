@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 using Herrd.Extensions.interfaces;
 
 namespace Herrd.Extensions.Providers.TrackServices
@@ -34,35 +36,35 @@ namespace Herrd.Extensions.Providers.TrackServices
 				EmbedUrl = second[0];
 			}
 			// HTTP LINK
-			if (Term.Contains("http"))
+			else if (Term.Contains("http"))
 			{
 				if (Term.Contains("/album"))
 				{
 					string[] first = Term.Split(new[] {"http://open.spotify.com/album/"}, StringSplitOptions.RemoveEmptyEntries);
 					EmbedUrl = "https://embed.spotify.com/?uri=spotify:album:" + first[0];
 				}
-				if (Term.Contains("/track"))
+				else if (Term.Contains("/track"))
 				{
 					string[] first = Term.Split(new[] { "http://open.spotify.com/track/" }, StringSplitOptions.RemoveEmptyEntries);
 					EmbedUrl = "https://embed.spotify.com/?uri=spotify:track:" + first[0];
 				}
-				if(Term.Contains("/playlist"))
+				else if(Term.Contains("/playlist"))
 				{
 					
 				}
 			}
 			// URI
-			if (Term.Contains("spotify:"))
+			else if (Term.Contains("spotify:"))
 			{
 				if (Term.Contains("album:"))
 				{
 					
 				}
-				if (Term.Contains(":track"))
+				else if (Term.Contains(":track"))
 				{
 					
 				}
-				if (Term.Contains(":playlist"))
+				else if (Term.Contains(":playlist"))
 				{
 					
 				}
