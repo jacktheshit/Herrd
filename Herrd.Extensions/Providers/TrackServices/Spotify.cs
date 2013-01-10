@@ -50,7 +50,10 @@ namespace Herrd.Extensions.Providers.TrackServices
 				}
 				else if(Term.Contains("/playlist"))
 				{
-					
+					string[] userFirst = Term.Split(new[] { "user/" }, StringSplitOptions.RemoveEmptyEntries);
+					string[] userSecond = userFirst[1].Split('/');
+					string[] playlistFirst = Term.Split(new[] { "playlist/" }, StringSplitOptions.RemoveEmptyEntries);
+					EmbedUrl = "https://embed.spotify.com/?uri=spotify:user:" + userSecond[0] + ":playlist:" + playlistFirst[1];
 				}
 			}
 			// URI
@@ -58,16 +61,26 @@ namespace Herrd.Extensions.Providers.TrackServices
 			{
 				if (Term.Contains("album:"))
 				{
-					
+					string[] first = Term.Split(new[] { "spotify:album:" }, StringSplitOptions.RemoveEmptyEntries);
+					EmbedUrl = "https://embed.spotify.com/?uri=spotify:album:" + first[0];
 				}
 				else if (Term.Contains(":track"))
 				{
-					
+					string[] first = Term.Split(new[] { "spotify:track:" }, StringSplitOptions.RemoveEmptyEntries);
+					EmbedUrl = "https://embed.spotify.com/?uri=spotify:track:" + first[0];
 				}
 				else if (Term.Contains(":playlist"))
 				{
-					
+					string[] userFirst = Term.Split(new[] { "user:" }, StringSplitOptions.RemoveEmptyEntries);
+					string[] userSecond = userFirst[1].Split(':');
+					string[] playlistFirst = Term.Split(new[] { "playlist:" }, StringSplitOptions.RemoveEmptyEntries);
+					EmbedUrl = "https://embed.spotify.com/?uri=spotify:user:" + userSecond[0] + ":playlist:" + playlistFirst[1];
 				}
+			} 
+			// STRING containing "spotify"
+			else
+			{
+				Type = "memo";
 			}
 		}
 	}

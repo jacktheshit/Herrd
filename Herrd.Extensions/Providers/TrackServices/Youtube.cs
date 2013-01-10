@@ -28,7 +28,31 @@ namespace Herrd.Extensions.Providers.TrackServices
 
 		private void GetInfoFromTerm()
 		{
-			
+			// EMBED CODE
+			if (Term.Contains("iframe"))
+			{
+				string[] first = Term.Split(new[] { "src=\"" }, StringSplitOptions.RemoveEmptyEntries);
+				string[] second = first[1].Split('?');
+				EmbedUrl = second[0] + "?rel=0";
+			}
+			// SHORT URL
+			if (Term.Contains("youtu.be"))
+			{
+				string[] first = Term.Split(new[] { ".be/" }, StringSplitOptions.RemoveEmptyEntries);
+				EmbedUrl = "http://www.youtube.com/embed/" + first[1] + "?rel=0";
+			}
+			// FULL URL
+			else if (Term.Contains("youtube.com"))
+			{
+				string[] first = Term.Split(new[] { "v=" }, StringSplitOptions.RemoveEmptyEntries);
+				string[] second = first[1].Split('&');
+				EmbedUrl = "http://www.youtube.com/embed/" + second[0] + "?rel=0";
+			}
+			// STRING containing "youtube"
+			else
+			{
+				Type = "memo";
+			}
 		}
 	}
 }

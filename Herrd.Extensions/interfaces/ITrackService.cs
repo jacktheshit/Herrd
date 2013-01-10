@@ -8,7 +8,7 @@ namespace Herrd.Extensions.interfaces
 {
 	public interface ITrackService
 	{
-
+		
 		string Type { get; set; }
 		string Title { get; set; }
 		string Term { get; set; }

@@ -1,10 +1,70 @@
-﻿@model Herrd.DataLayer.User
-
-@{
+﻿@{
     Layout = "~/Views/_layout.cshtml";
 }
 
 <div class="site_container">
-	<h2>About</h2>
-    @Model.user_name
+    <h1 class="no_display">About</h1>
+    <p class="h1">A to-do list for music and videos.</p>
+    <p>Don&rsquo;t lose track of the music and videos you've been meaning to catch up on. Herrd your media from the web's best sources and stream it from anywhere, all in the one place.</p>
+    <div class="spacer">
+        <!--spacer-->
+    </div>
+    <h2>Services</h2>
+    <div class="column_half">
+        <p>
+            <a href="http://www.spotify.com" class="external">
+                <img src="images/logo-spotify.gif" width="261" alt="Spotify" />
+            </a>
+        </p>
+        <h2 class="h3">Spotify</h2>
+        <p>Add tracks or albums using a Spotify URI, HTTP link or embed code.</p>
+    </div>
+    <div class="column_half no_margin_right">
+        <p>
+            <a href="http://www.soundcloud.com" class="external">
+                <img src="images/logo-soundcloud.gif" width="261" alt="Soundcloud" />
+            </a>
+        </p>
+        <h2 class="h3">Soundcloud</h2>
+        <p>Add a track or artist set. Use a Soundcloud URL, short URL or embed code.</p>
+    </div>
+    <div class="spacer">
+        <!--spacer-->
+    </div>
+    <div class="column_half">
+        <p>
+            <a href="http://www.youtube.com" class="external">
+                <img src="images/logo-youtube.gif" width="261" alt="YouTube" />
+            </a>
+        </p>
+        <h2 class="h3">YouTube</h2>
+        <p>Add a video with a URL, short URL or embed code.</p>
+    </div>
+    <div class="column_half no_margin_right">
+        <p>
+            <a href="http://www.vimeo.com" class="external">
+                <img src="images/logo-vimeo.gif" width="261" alt="Vimeo" />
+            </a>
+        </p>
+        <h2 class="h3">Vimeo</h2>
+        <p>Add a video with a URL or embed code.</p>
+    </div>
+    <div class="spacer">
+        <!--spacer-->
+    </div>
+    <p>Got a <strong>link</strong> to revisit on the web? Add it to your Herrd playlist to create a <strong>memo</strong>. If you know what you want to add, but don't have the link handy, add a memo on the go and update it later.</p>
+    <p>Titles for these supported services (and any URLs you save) will be generated automatically, so no need to fill in the <em>Title (optional)</em> field.
+    </p>
+    <div class="spacer">
+        <!--spacer-->
+    </div>
+    <h2>Search</h2>
+    <p>Use the search at the top of the page to filter your Herrd. Refine the list using:</p>
+    <ul>
+        <li>Keywords</li>
+        <li>Source (ie. <em>Spotify</em> will only return items sourced from that service. <em>Link</em> or <em>memo</em> will also return their respective items)
+        </li>
+        <li>Dates (ie. <em>February</em> or <em>2012</em> will only return items from that month or year)
+        </li>
+    </ul>
 </div>
