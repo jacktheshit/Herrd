@@ -74,8 +74,9 @@ namespace Herrd.Website.Controllers
 
 				var processTrack = new ProcessTrack(trackModel.Term, trackModel.Title);
 				var service = processTrack.GetService();
+				return View("AddTrackDebug", service);
 
-				return HttpNotFound();
+				//return HttpNotFound();
 
 				//var track = new Track
 				//{

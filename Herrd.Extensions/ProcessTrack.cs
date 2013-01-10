@@ -28,9 +28,9 @@ namespace Herrd.Extensions
 		public ITrackService GetService()
 		{
 			if (Term.Contains(Spotify)) return new Spotify(Term, Title);
-			if (Term.Contains(Soundcloud)) return new Spotify(Term, Title);
-			if (Term.Contains(Vimeo)) return new Spotify(Term, Title);
-			if (Term.Contains(Youtube)) return new Spotify(Term, Title);
+			if (Term.Contains(Soundcloud)) return new Soundcloud(Term, Title);
+			if (Term.Contains(Youtube)) return new Youtube(Term, Title);
+			if (Term.Contains(Vimeo)) return new Vimeo(Term, Title);
 			return null;
 		}
 
